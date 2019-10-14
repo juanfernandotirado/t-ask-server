@@ -1,5 +1,6 @@
 //Run from project root folder:
 //node -r dotenv/config database/populateTables/setup.js
+//
 /**
  * 1. Deletes all rows from:
  * 

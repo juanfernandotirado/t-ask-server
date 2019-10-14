@@ -24,9 +24,7 @@ const getDatabaseLanguages = () => {
 }
 
 
-
 //////////////////////////////////////////////////////
-
 
 
 const getDatabaseTimeSpans = () => {
@@ -54,6 +52,7 @@ const getDatabaseTimeSpans = () => {
 
 ///////////////////////////////////////////////////////////
 
+
 const getRepos = () => {
     return new Promise((resolve, reject) => {
 
@@ -63,12 +62,11 @@ const getRepos = () => {
             //......
             if (timeSpansCount < timeSpans.length) {
 
-
                 let currentLanguage = languages[languagesCount]
                 let currentTimeSpan = timeSpans[timeSpansCount]
-
-                let url = `https://api.github.com/search/repositories?q=language%3A${currentLanguage.name}+created%3A%3E${currentTimeSpan.start}+created%3A%3C${currentTimeSpan.end}`
-
+            
+                let url = `https://api.github.com/search/repositories?q=language%3A${currentLanguage.name}+created%3A${currentTimeSpan.start}..${currentTimeSpan.end}`
+                
                 axios.get(url)
                     .then(res => {
 
@@ -76,10 +74,11 @@ const getRepos = () => {
                             "id_language": currentLanguage.id_language,
                             "id_timespan": currentTimeSpan.id_timespan,
                             "total": res.data.total_count,
+
+                            //Fields below will not be stored in DB:
                             "name": currentLanguage.name,
                             "start": currentTimeSpan.start,
                             "end": currentTimeSpan.end
-
                         })
 
                         console.log(`getRepos -> Language: ${languagesCount + 1}/${languages.length} --- TimeSpan: ${timeSpansCount + 1}/${timeSpans.length}`);
@@ -114,7 +113,9 @@ const getRepos = () => {
     })//End of Promise
 }
 
+
 ////////////////////////////////////////////////
+
 
 const addLanguagesTimeSpansSingle = (id_language, id_timespan, total) => {
 
