@@ -44,7 +44,7 @@ let end =
             `2019-12-31`
         ]
 
-let xxx = 0
+let currentIndex = 0
 
 const addTimeSpan = (start, end) => {
 
@@ -64,13 +64,14 @@ const populateTimeSpans = () => {
 
     return new Promise((resolve, reject) => {
 
-        console.log('populateTimeSpans');
+        if (currentIndex < start.length) {
 
-        if (xxx < start.length) {
-
-            addTimeSpan(start[xxx], end[xxx])
+            addTimeSpan(start[currentIndex], end[currentIndex])
                 .then(() => {
-                    xxx++
+
+                    console.log('populateTimeSpans ', start[currentIndex], end[currentIndex]);
+
+                    currentIndex++
                     resolve(populateTimeSpans())
                 })
 

@@ -15,32 +15,32 @@ const { populateTimeSpans } = require('./timeSpan.js');
 const { populateLanguagesTimeSpan } = require('./languagesTimeSpan.js');
 
 
-const DELETE_ALL = (callback) => {
-    const { connectionPool } = require('../connection.js');
-    let sql = ` DELETE FROM LanguagesTimeSpan; DELETE FROM Languages; DELETE FROM TimeSpan;`
+const deleteLanguagesTimeSpans = () => {
+    return new Promise((resolve, reject) => {
 
-    connectionPool.query(sql, (error, result) => {
-        if (error) {
-            console.log(error);
+        const { connectionPool } = require('../connection.js');
+        let sql = ` DELETE FROM LanguagesTimeSpan; DELETE FROM Languages; DELETE FROM TimeSpan;`
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                console.log('deleteLanguagesTimeSpans ' + error)
+            } else {
+                console.log('deleteLanguagesTimeSpans - Cleared tables')
+            }
 
-        } else {
-            console.log(result)
-        }
+            resolve()
+        })
 
-        callback()
-    })
+    })//End promise
 }
 
 
-DELETE_ALL(() => {
 
-    populateLanguages()
-        .then(populateTimeSpans)
-        .then(populateLanguagesTimeSpan)
+deleteLanguagesTimeSpans()
+    .then(populateLanguages)
+    .then(populateTimeSpans)
+    .then(populateLanguagesTimeSpan)
 
-        .then(result => {
-            console.log(`ALL DONE`);
-        })
-
-})
-
+    .then(result => {
+        console.log(`ALL DONE`);
+        process.exit()
+    })

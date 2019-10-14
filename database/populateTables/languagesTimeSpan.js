@@ -82,8 +82,9 @@ const getRepos = () => {
 
                         })
 
+                        console.log(`getRepos -> Language: ${languagesCount + 1}/${languages.length} --- TimeSpan: ${timeSpansCount + 1}/${timeSpans.length}`);
+
                         timeSpansCount++;
-                        console.log('timeSpansCount++ -> ' + timeSpansCount);
 
                         resolve(getRepos());
                     })
@@ -104,7 +105,8 @@ const getRepos = () => {
 
         } else {
 
-            console.log(finalRepos);
+            // console.log(finalRepos);
+            console.log(`DONE getRepos -> LanguageTimeSpans objects found: ${finalRepos.length}`);
             resolve();
         }
 
@@ -140,6 +142,9 @@ const populateLanguagesTimeSpans = () => {
 
             addLanguagesTimeSpansSingle(item.id_language, item.id_timespan, item.total)
                 .then(() => {
+                    
+                    console.log(`populateLanguagesTimeSpans -> added to DB`);
+
                     finalReposCount++
                     resolve(populateLanguagesTimeSpans())
                 })

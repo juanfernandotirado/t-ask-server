@@ -22,7 +22,7 @@ let array =
             `Go`
         ]
 
-let yyy = 0
+let currentIndex = 0
 
 const addLanguage = (name, description) => {
 
@@ -42,13 +42,14 @@ const populateLanguages = () => {
 
     return new Promise((resolve, reject) => {
 
-        console.log('populateLanguages');
+        if (currentIndex < array.length) {
 
-        if (yyy < array.length) {
-
-            addLanguage(array[yyy], '')
+            addLanguage(array[currentIndex], '')
                 .then(() => {
-                    yyy++
+
+                    console.log('populateLanguages ', array[currentIndex], '');
+
+                    currentIndex++
                     resolve(populateLanguages())
                 })
 

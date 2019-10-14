@@ -26,8 +26,6 @@ app.post('/contact-message', (req, res) => {
 
 //*** ***/
 
-require('./database/populateTables/setup.js')
-
 
 //*** API START ***
 app.set('port', process.env.PORT || 8080);
