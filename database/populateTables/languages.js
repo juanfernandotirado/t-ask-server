@@ -1,10 +1,9 @@
 // Run this once to populate languages table
-// node languajes.js
 
 const { connectionPool } = require('../connection.js');
 
 let array =
-    process.env.DEBUG ? [`Python`, `Java`] :
+    (process.env.NODE_ENV === 'development') ? [`Python`, `Java`] :
         [
             `Python`,
             `Java`,

@@ -1,8 +1,14 @@
-//....
-
-process.env.DEBUG = true
-
-//....
+//Run from project root folder:
+//node -r dotenv/config database/populateTables/setup.js
+/**
+ * 1. Deletes all rows from:
+ * 
+ * LanguagesTimeSpan
+ * Languages
+ * TimeSpan
+ * 
+ * 2. Then repopulate them.
+ */
 
 const { populateLanguages } = require('./languages.js');
 const { populateTimeSpans } = require('./timeSpan.js');
@@ -19,14 +25,14 @@ const DELETE_ALL = (callback) => {
 
         } else {
             console.log(result)
-            callback()
         }
+
+        callback()
     })
 }
 
 
 DELETE_ALL(() => {
-    
 
     populateLanguages()
         .then(populateTimeSpans)
@@ -35,7 +41,6 @@ DELETE_ALL(() => {
         .then(result => {
             console.log(`ALL DONE`);
         })
-
 
 })
 

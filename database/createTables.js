@@ -1,3 +1,6 @@
+//Run from project root folder:
+//node -r dotenv/config database/createTables.js
+
 const { connectionPool } = require('./connection.js');
 
 const createTables = `
