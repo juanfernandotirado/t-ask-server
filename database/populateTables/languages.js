@@ -3,24 +3,24 @@
 const { connectionPool } = require('../connection.js');
 
 let array =
-    (process.env.NODE_ENV === 'development') ? [`Python`, `Java`] :
-        [
-            `Python`,
-            `Java`,
-            `Javascript`,
-            `C#`,
-            `PHP`,
-            `C/C++`,
-            `R`,
-            `Objective-C`,
-            `Swift`,
-            `Matlab`,
-            `TypeScript`,
-            `Kotlin`,
-            `Ruby`,
-            `VBA`,
-            `Go`
-        ]
+    [
+        `Python`,
+        `Java`,
+        `Javascript`,
+        `C#`,
+        `PHP`,
+        `C++`,
+        `R`,
+        `Objective-C`,
+        `Swift`,
+        `Matlab`,
+        `TypeScript`,
+        `Kotlin`,
+        `Ruby`,
+        `visual-basic`,
+        `Go`,
+        `Rust`
+    ]
 
 let currentIndex = 0
 

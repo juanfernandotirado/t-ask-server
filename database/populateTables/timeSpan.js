@@ -5,22 +5,21 @@ const { connectionPool } = require('../connection.js');
 let start = []
 let end = []
 
-if (process.env.NODE_ENV === 'development') {
+//Fills arrays with all timespans...
+let s1 = `-01-01`
+let s2 = `-06-30`
 
-    //Fill arrays with just 2 timespans...
-    start = [`2012-01-01`, `2013-01-01`]
-    end = [`2012-06-30`, `2013-06-30`]
+let e1 = `-07-01`
+let e2 = `-12-31`
 
-} else {
+for (let i = 2015; i < 2020; i++) {
+    start.push(i + s1)
+    end.push(i + s2)
+}
 
-    //Fills arrays with all timespans...
-    let s = `-01-01`
-    let e = `-12-31`
-
-    for (let i = 2012; i < 2019; i++) {
-        start.push(i + s)
-        end.push(i + e)
-    }
+for (let i = 2015; i < 2020; i++) {
+    start.push(i + e1)
+    end.push(i + e2)
 }
 
 //....
