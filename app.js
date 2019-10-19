@@ -30,6 +30,10 @@ const {routerIndex} = require('./routes/index.js')
 app.use('/api',routerIndex)
 
 
+app.get('*', (req,res) => {
+  res.send('t-ask api v1')
+})
+
 //*** ***/
 
 
