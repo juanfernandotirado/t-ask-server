@@ -15,7 +15,9 @@ CREATE TABLE Jobs (
     id_job int AUTO_INCREMENT,
     id_location int,
     created datetime,
-    PRIMARY KEY (id_job)
+    soc int,
+    PRIMARY KEY (id_job),
+    FOREIGN KEY (soc) REFERENCES JobCategories(soc)
     );
   
     CREATE TABLE TimeSpan (
