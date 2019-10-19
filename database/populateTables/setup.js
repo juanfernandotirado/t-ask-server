@@ -12,21 +12,31 @@
  * 2. Then repopulate them.
  */
 
+
+const { populateJobCategories } = require('./jobCategories.js');
 const { populateLanguages } = require('./languages.js');
 const { populateTimeSpans } = require('./timeSpan.js');
 const { populateLanguagesTimeSpan } = require('./languagesTimeSpan.js');
 
 
-const deleteLanguagesTimeSpans = () => {
+const clearTables = () => {
     return new Promise((resolve, reject) => {
 
         const { connectionPool } = require('../connection.js');
-        let sql = ` DELETE FROM LanguagesTimeSpan; DELETE FROM Languages; DELETE FROM TimeSpan;`
+
+        let sql =
+            ` 
+        DELETE FROM LanguagesTimeSpan;
+        DELETE FROM Languages;
+        DELETE FROM TimeSpan;
+        DELETE FROM JobCategories;
+        `
+
         connectionPool.query(sql, (error, result) => {
             if (error) {
-                console.log('deleteLanguagesTimeSpans ' + error)
+                console.log('clearTables ' + error)
             } else {
-                console.log('deleteLanguagesTimeSpans - Cleared tables')
+                console.log('clearTables - Cleared tables')
             }
 
             resolve()
@@ -37,7 +47,8 @@ const deleteLanguagesTimeSpans = () => {
 
 
 
-deleteLanguagesTimeSpans()
+clearTables()
+    .then(populateJobCategories)
     .then(populateLanguages)
     .then(populateTimeSpans)
     .then(populateLanguagesTimeSpan)

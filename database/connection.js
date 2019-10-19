@@ -23,7 +23,6 @@ const databaseConfig = {
     }
 }
 
-
 //Uses one of the configs depending on the environment:
 exports.connectionPool =
     mysql.createPool(databaseConfig[process.env.NODE_ENV]);

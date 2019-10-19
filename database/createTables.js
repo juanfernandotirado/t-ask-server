@@ -4,6 +4,13 @@
 const { connectionPool } = require('./connection.js');
 
 const createTables = `
+
+CREATE TABLE JobCategories (
+    soc int NOT NULL,
+    name varchar(255),
+    PRIMARY KEY (soc)
+    );
+
 CREATE TABLE Jobs (
     id_job int AUTO_INCREMENT,
     id_location int,
