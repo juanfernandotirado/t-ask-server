@@ -26,6 +26,14 @@ app.post('/contact-message', (req, res) => {
 
 //*** ***/
 
+const {routerIndex} = require('./routes/index.js')
+app.use('/api',routerIndex)
+
+
+//*** ***/
+
+
+
 
 //*** API START ***
 app.set('port', process.env.PORT || 8080);
