@@ -17,7 +17,7 @@ for (let i = 2015; i < 2020; i++) {
     end.push(i + s2)
 }
 
-for (let i = 2015; i < 2020; i++) {
+for (let i = 2015; i < 2019; i++) {
     start.push(i + e1)
     end.push(i + e2)
 }

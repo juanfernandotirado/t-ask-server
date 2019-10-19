@@ -1,35 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const path = require('path')
+const { getLanguagesLatestCount } = require('../database/databaseUtils.js')
 
-const pathArray =['database/', 'databaseUtils.js']
 
-const {getLanguages} = require(path.join(__dirname, ...pathArray))
 
-getLanguages()
+router.get('/languages', (req, res) => {
 
-router.get('/languages', (req,res)=>{
-
-    res.send(
-   
-        {
-            languages : [
-    
-                {
-                    id_language: 1,
-                    name: 'java',
-                    total: 123456
-                },
-                {
-                    id_language: 4,
-                    name: 'Ruby',
-                    total: 123456
-                }	
-            ]
-        }
-
-    )
+    getLanguagesLatestCount()
+        .then(result => {
+            res.send(result)
+        })
 })
 
 
