@@ -14,12 +14,14 @@
 
 
 const { populateJobCategories } = require('./jobCategories.js');
+const { readJobsFromFile } = require('./populateJobs.js');
+const { populateJobs } = require('./populateJobs.js');
 const { populateLanguages } = require('./languages.js');
 const { populateTimeSpans } = require('./timeSpan.js');
 const { populateLanguagesTimeSpan } = require('./languagesTimeSpan.js');
 
 
-const clearTables = () => {
+const clearTablesLanguages = () => {
     return new Promise((resolve, reject) => {
 
         const { connectionPool } = require('../connection.js');
@@ -29,6 +31,29 @@ const clearTables = () => {
         DELETE FROM LanguagesTimeSpan;
         DELETE FROM Languages;
         DELETE FROM TimeSpan;
+        `
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                console.log('clearTables ' + error)
+            } else {
+                console.log('clearTables - Cleared tables')
+            }
+
+            resolve()
+        })
+
+    })//End promise
+}
+
+const clearTablesJobs = () => {
+    return new Promise((resolve, reject) => {
+
+        const { connectionPool } = require('../connection.js');
+
+        let sql =
+            ` 
+        DELETE FROM Jobs;
         DELETE FROM JobCategories;
         `
 
@@ -47,11 +72,15 @@ const clearTables = () => {
 
 
 
-clearTables()
+clearTablesJobs()
     .then(populateJobCategories)
-    .then(populateLanguages)
-    .then(populateTimeSpans)
-    .then(populateLanguagesTimeSpan)
+    .then(readJobsFromFile)
+    .then(populateJobs)
+
+    // .then(clearTablesLanguages)
+    // .then(populateLanguages)
+    // .then(populateTimeSpans)
+    // .then(populateLanguagesTimeSpan)
 
     .then(result => {
         console.log(`ALL DONE`);
