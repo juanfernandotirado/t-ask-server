@@ -92,3 +92,33 @@ const getTrendLanguages = () =>{
 exports.getTrendLanguages = getTrendLanguages;
 
 //////////////////////////////////////////////////////////////////////////
+
+const getAllTimeSpanByLanguage = () =>{
+    
+    return new Promise((resolve,reject)=>{
+
+        const SQL_LATEST_TIMESPAN_ID = `SELECT * FROM TimeSpan;`
+        // WHERE LanguagesTimeSpan.id_timespan = (${SQL_LATEST_TIMESPAN_ID})
+        let sql = `SELECT Languages.name, total
+            FROM Languages
+            INNER JOIN LanguagesTimeSpan
+            ON Languages.id_language = LanguagesTimeSpan.id_language            
+            ORDER BY LanguagesTimeSpan.total DESC`
+        
+        connectionPool.query(sql, (error,result)=>{
+            if(error){
+                reject(error)
+            }else{
+                let top5Languages = result.map(item => {
+                    return item.name
+                })
+                
+                resolve(top5Languages)
+            }
+        })
+    })
+}
+
+exports.getAllTimeSpanByLanguage = getAllTimeSpanByLanguage;
+
+//////////////////////////////////////////////////////////////////////////
