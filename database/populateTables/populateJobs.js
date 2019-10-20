@@ -87,7 +87,7 @@ const fs = require('fs');
 
 const writeToFile = (obj) => {
 
-    fs.writeFile("./output/result.json", JSON.stringify(obj), function (err) {
+    fs.writeFile(__dirname + '/jobs.json', JSON.stringify(obj), function (err) {
 
         if (err) {
             return console.log(err);
@@ -101,7 +101,7 @@ const readJobsFromFile = () => {
 
     return new Promise((resolve, reject) => {
 
-        fs.createReadStream(__dirname + '/output/filtered_jobs.csv')
+        fs.createReadStream(__dirname + '/filtered_jobs.csv')
             .pipe(csv())
             .on('data', (row) => {
 
