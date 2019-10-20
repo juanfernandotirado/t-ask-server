@@ -61,34 +61,34 @@ exports.getLanguagesLatestCount = getLanguagesLatestCount;
 
 //////////////////////////////////////////////////////////////////////////
 
-const getTrendLanguages = () =>{
+// const getTrendLanguages = () =>{
     
-    return new Promise((resolve,reject)=>{
+//     return new Promise((resolve,reject)=>{
 
-        const SQL_LATEST_TIMESPAN_ID = `SELECT id_timespan FROM TimeSpan WHERE start = (SELECT MAX(start) FROM TimeSpan)`
+//         const SQL_LATEST_TIMESPAN_ID = `SELECT id_timespan FROM TimeSpan WHERE start = (SELECT MAX(start) FROM TimeSpan)`
 
-        let sql = `SELECT Languages.name
-            FROM Languages
-            INNER JOIN LanguagesTimeSpan
-            ON Languages.id_language = LanguagesTimeSpan.id_language
-            WHERE LanguagesTimeSpan.id_timespan = (${SQL_LATEST_TIMESPAN_ID})
-            ORDER BY LanguagesTimeSpan.total DESC
-            LIMIT 5;`
+//         let sql = `SELECT Languages.name
+//             FROM Languages
+//             INNER JOIN LanguagesTimeSpan
+//             ON Languages.id_language = LanguagesTimeSpan.id_language
+//             WHERE LanguagesTimeSpan.id_timespan = (${SQL_LATEST_TIMESPAN_ID})
+//             ORDER BY LanguagesTimeSpan.total DESC
+//             LIMIT 5;`
         
-        connectionPool.query(sql, (error,result)=>{
-            if(error){
-                reject(error)
-            }else{
-                let top5Languages = result.map(item => {
-                    return item.name
-                })
+//         connectionPool.query(sql, (error,result)=>{
+//             if(error){
+//                 reject(error)
+//             }else{
+//                 let top5Languages = result.map(item => {
+//                     return item.name
+//                 })
                 
-                resolve(top5Languages)
-            }
-        })
-    })
-}
+//                 resolve(top5Languages)
+//             }
+//         })
+//     })
+// }
 
-exports.getTrendLanguages = getTrendLanguages;
+// exports.getTrendLanguages = getTrendLanguages;
 
 //////////////////////////////////////////////////////////////////////////
