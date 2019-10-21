@@ -4,7 +4,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 
 //One of the configs will be used, depending on the environment:
 const databaseConfig = {
-    'production': {
+    'development': {
         host: process.env.DATABASE_HOST_DEV,
         user: process.env.DATABASE_USER_DEV,
         password: process.env.DATABASE_PASSWORD_DEV,
@@ -13,7 +13,7 @@ const databaseConfig = {
         connectionLimit: 5
     },
 
-    'development': {
+    'production': {
         host: process.env.DATABASE_HOST,
         user: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
