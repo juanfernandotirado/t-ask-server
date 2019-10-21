@@ -24,41 +24,27 @@ for (let i = 2015; i < 2019; i++) {
 
 //....
 
-let currentIndex = 0
-
-const addTimeSpan = (start, end) => {
-
+const populateTimeSpans = () => {
     return new Promise((resolve, reject) => {
 
-        let sql = `INSERT INTO TimeSpan (start, end) VALUES ('${start}', '${end}');`
+        let concatenatedSQL = ''
 
-        connectionPool.query(sql, (error, result) => {
+        for (let index = 0; index < start.length; index++) {
+            concatenatedSQL += `INSERT INTO TimeSpan (start, end) VALUES ('${start[index]}', '${end[index]}');`
+        }
+
+        connectionPool.query(concatenatedSQL, (error, result) => {
             if (error) {
                 reject(error)
-            } else { resolve(result) }
+            } else {
+                
+                console.log('populateTimeSpans DONE');
+                
+                resolve()
+            }
         })
-    })
-}
 
-const populateTimeSpans = () => {
-
-    return new Promise((resolve, reject) => {
-
-        if (currentIndex < start.length) {
-
-            addTimeSpan(start[currentIndex], end[currentIndex])
-                .then(() => {
-
-                    console.log('populateTimeSpans ', start[currentIndex], end[currentIndex]);
-
-                    currentIndex++
-                    resolve(populateTimeSpans())
-                })
-
-        } else {
-            resolve()
-        }
-    })
+    })  //End promise
 }
 
 

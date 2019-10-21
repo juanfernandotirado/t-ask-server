@@ -17,7 +17,7 @@ const array = [
     { soc: 15115100, name: 'Computer User Support Specialists' },
     { soc: 15115200, name: 'Computer Network Support Specialists' },
     { soc: 15119900, name: 'Computer Occupations, All Other' },
-    
+
     { soc: 15112101, name: 'Informatics Nurse Specialists' },
     { soc: 15119901, name: 'Software Quality Assurance Engineers and Testers' },
     { soc: 15119902, name: 'Computer Systems Engineers/Architects' },
@@ -32,48 +32,33 @@ const array = [
     { soc: 15119911, name: 'Video Game Designers' },
     { soc: 15119912, name: 'Document Management Specialists' },
     { soc: 15114301, name: 'Telecommunications Engineering Specialists' },
-    	
+
 
 ]
 
-
-let currentIndex = 0
-
-const addJobCategory = (soc, name) => {
-
+const populateJobCategories = () => {
     return new Promise((resolve, reject) => {
 
-        let sql = `INSERT INTO JobCategories (soc, name) VALUES ('${soc}', '${name}');`
+        console.log('populateJobCategories... ');
 
-        connectionPool.query(sql, (error, result) => {
+        let concatenatedSQL = ''
+
+        array.forEach(item => {
+            const { soc, name } = item
+            concatenatedSQL += `INSERT INTO JobCategories (soc, name) VALUES ('${soc}', '${name}');`
+        })
+
+        connectionPool.query(concatenatedSQL, (error, result) => {
             if (error) {
                 reject(error)
-            } else { resolve(result) }
+            } else {
+
+                console.log('populateJobCategories... DONE');
+                resolve()
+            }
         })
-    })
-}
 
-const populateJobCategories = () => {
-
-    return new Promise((resolve, reject) => {
-
-        if (currentIndex < array.length) {
-
-            const { soc, name } = array[currentIndex]
-
-            addJobCategory(soc, name)
-                .then(() => {
-
-                    console.log('populateJobCategories ', soc, name);
-
-                    currentIndex++
-                    resolve(populateJobCategories())
-                })
-
-        } else {
-            resolve()
-        }
-    })
+    }) //End promise
 }
 
 

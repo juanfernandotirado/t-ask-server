@@ -77,10 +77,10 @@ clearTablesJobs()
     .then(readJobsFromFile)
     .then(populateJobs)
 
-    // .then(clearTablesLanguages)
-    // .then(populateLanguages)
-    // .then(populateTimeSpans)
-    // .then(populateLanguagesTimeSpan)
+    .then(clearTablesLanguages)
+    .then(populateLanguages)
+    .then(populateTimeSpans)
+    .then(populateLanguagesTimeSpan)
 
     .then(result => {
         console.log(`ALL DONE`);

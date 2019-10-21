@@ -22,41 +22,28 @@ let array =
         `Rust`
     ]
 
-let currentIndex = 0
-
-const addLanguage = (name, description) => {
-
+const populateLanguages = () => {
     return new Promise((resolve, reject) => {
 
-        let sql = `INSERT INTO Languages (name, description) VALUES ('${name}', '${description}');`
+        let concatenatedSQL = ''
 
-        connectionPool.query(sql, (error, result) => {
+        array.forEach(item => {
+            const name = item
+            const description = ''
+            concatenatedSQL += `INSERT INTO Languages (name, description) VALUES ('${name}', '${description}');`
+        })
+
+        connectionPool.query(concatenatedSQL, (error, result) => {
             if (error) {
                 reject(error)
-            } else { resolve(result) }
+            } else {
+
+                console.log('populateLanguages DONE');
+                resolve()
+            }
         })
-    })
-}
 
-const populateLanguages = () => {
-
-    return new Promise((resolve, reject) => {
-
-        if (currentIndex < array.length) {
-
-            addLanguage(array[currentIndex], '')
-                .then(() => {
-
-                    console.log('populateLanguages ', array[currentIndex], '');
-
-                    currentIndex++
-                    resolve(populateLanguages())
-                })
-
-        } else {
-            resolve()
-        }
-    })
+    })  //End promise
 }
 
 

@@ -33,44 +33,31 @@ const socArray = [
 
 const array = []
 
-
-let currentIndex = 0
-
-const addJob = (hash, country, created, soc) => {
-
+const populateJobs = () => {
     return new Promise((resolve, reject) => {
 
-        let sql = `INSERT INTO Jobs (id_location, created, soc) VALUES ('${country}', '${created}', '${soc}' );`
+        console.log('populatingJobs...');
 
-        connectionPool.query(sql, (error, result) => {
+
+        let concatenatedSQL = ''
+
+        array.forEach(item => {
+            const { hash, country, created, soc } = item
+            concatenatedSQL += `INSERT INTO Jobs (id_location, created, soc) VALUES ('${country}', '${created}', '${soc}' );`
+        })
+
+        connectionPool.query(concatenatedSQL, (error, result) => {
             if (error) {
                 reject(error)
-            } else { resolve(result) }
+            } else {
+
+                console.log('populatingJobs... DONE');
+                resolve()
+            }
         })
-    })
-}
 
-const populateJobs = () => {
 
-    return new Promise((resolve, reject) => {
-
-        if (currentIndex < array.length) {
-
-            const { hash, country, created, soc } = array[currentIndex]
-
-            addJob(hash, country, created, soc)
-                .then(() => {
-
-                    console.log('populateJobs ', hash, country, created, soc);
-
-                    currentIndex++
-                    resolve(populateJobs())
-                })
-
-        } else {
-            resolve()
-        }
-    })
+    }) //End promise
 }
 
 
@@ -97,6 +84,9 @@ const writeToFile = (obj) => {
     });
 }
 
+let lastSoc = socArray[0]
+let lastSocCount = 0
+
 const readJobsFromFile = () => {
 
     return new Promise((resolve, reject) => {
@@ -107,14 +97,36 @@ const readJobsFromFile = () => {
 
                 if ((row.country === 'USA' || row.country === 'CAN') && socArray.includes(row.onet_occupation_code)) {
 
-                    array.push({
-                        hash: row.hash,
-                        country: row.country === 'USA' ? 1 : 2,
-                        created: row.created,
-                        soc: row.onet_occupation_code.replace('-', '').replace('.', '')
-                    })
+                    if (row.onet_occupation_code === lastSoc) {
+                        if (lastSocCount < 15) {
 
-                    console.log('Addedto array... ' + array.length);
+                            array.push({
+                                hash: row.hash,
+                                country: row.country === 'USA' ? 1 : 2,
+                                created: row.created,
+                                soc: row.onet_occupation_code.replace('-', '').replace('.', '')
+                            })
+
+                            lastSocCount++
+
+                        } else {
+
+                        }
+                    } else {
+                        lastSocCount = 1
+                        lastSoc = row.onet_occupation_code
+
+                        array.push({
+                            hash: row.hash,
+                            country: row.country === 'USA' ? 1 : 2,
+                            created: row.created,
+                            soc: row.onet_occupation_code.replace('-', '').replace('.', '')
+                        })
+
+                        console.log('Added jobs to array... code: ' + lastSoc + 'Total in array: ' + array.length);
+                        lastSocCount++
+                    }
+
                 }
 
             })
@@ -122,7 +134,7 @@ const readJobsFromFile = () => {
                 console.log('CSV file successfully processed');
 
                 resolve()
-                // writeToFile(filteredArray)
+                // writeToFile(array)
             });
 
     })  //end promise

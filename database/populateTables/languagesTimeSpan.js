@@ -41,7 +41,7 @@ const getDatabaseTimeSpans = () => {
                         "end": getFullDate(item.end)
                     }
                 })
-                
+
                 resolve();
 
             })
@@ -56,138 +56,62 @@ const getDatabaseTimeSpans = () => {
 const getRepos = () => {
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT * FROM Languages;`
+        let data = require('./languagesData.js')
+
+        //.....
+
+        if (languagesCount < languages.length) {
+
+            //......
+            if (timeSpansCount < timeSpans.length) {
+
+                let currentLanguage = languages[languagesCount]
+                let currentTimeSpan = timeSpans[timeSpansCount]
 
 
-        connectionPool.query(sql, (error, result) => {
+                let currLangFromData = data.find(item => {
+                    return item.languageName.toLowerCase() === currentLanguage.name.toLowerCase()
+                })
 
-            if (error) {
-                console.log(error + 'ERROR');
-                reject(error)
+                let total = currLangFromData.data.find(item => {
+
+                    // console.log(`Try this... ${item.startDate} === ${currentTimeSpan.start}`);
+
+                    return item.startDate === currentTimeSpan.start && item.endDate === currentTimeSpan.end
+                }).repoCount
+
+                finalRepos.push({
+                    "id_language": currentLanguage.id_language,
+                    "id_timespan": currentTimeSpan.id_timespan,
+                    "total": total,
+
+                    //Fields below will not be stored in DB:
+                    "name": currentLanguage.name,
+                    "start": currentTimeSpan.start,
+                    "end": currentTimeSpan.end
+                })
+
+                console.log(`getRepos -> Language: ${languagesCount + 1}/${languages.length} --- TimeSpan: ${timeSpansCount + 1}/${timeSpans.length}`);
+
+                timeSpansCount++;
+
+                resolve(getRepos());
+
             } else {
 
-                let listOfAllLanguages = result;
-                let data = require('./languagesData.js')
+                timeSpansCount = 0;
 
-                //.....
-
-                if (languagesCount < languages.length) {
-
-                    //......
-                    if (timeSpansCount < timeSpans.length) {
-
-                        let currentLanguage = languages[languagesCount]
-                        let currentTimeSpan = timeSpans[timeSpansCount]                        
-                        
-
-                        let currLangFromData = data.find(item => {
-                            return item.languageName.toLowerCase() === currentLanguage.name.toLowerCase()
-                        })                        
-
-                        let total = currLangFromData.data.find(item => {
-
-                            console.log(`Try this... ${item.startDate} === ${currentTimeSpan.start}`);                            
-
-                            return item.startDate === currentTimeSpan.start && item.endDate === currentTimeSpan.end
-                        }).repoCount
-
-                        finalRepos.push({
-                            "id_language": currentLanguage.id_language,
-                            "id_timespan": currentTimeSpan.id_timespan,
-                            "total": total,
-
-                            //Fields below will not be stored in DB:
-                            "name": currentLanguage.name,
-                            "start": currentTimeSpan.start,
-                            "end": currentTimeSpan.end
-                        })
-
-                        console.log(`getRepos -> Language: ${languagesCount + 1}/${languages.length} --- TimeSpan: ${timeSpansCount + 1}/${timeSpans.length}`);
-
-                        timeSpansCount++;
-
-                        resolve(getRepos());
-
-                    } else {
-
-                        timeSpansCount = 0;
-
-                        languagesCount++;
-                        resolve(getRepos());
-                    }
-                    //......
-
-
-                } else {
-
-                    // console.log(finalRepos);
-                    console.log(`DONE getRepos -> LanguageTimeSpans objects found: ${finalRepos.length}`);
-                    resolve();
-                }
-
-                resolve()
+                languagesCount++;
+                resolve(getRepos());
             }
-
-        })
-
+            //......
 
 
+        } else {
 
-
-
-        //Check this twice... In the begining and at the end
-        // if (languagesCount < languages.length) {
-
-        //     //......
-        //     if (timeSpansCount < timeSpans.length) {
-
-        //         let currentLanguage = languages[languagesCount]
-        //         let currentTimeSpan = timeSpans[timeSpansCount]
-
-        //         let url = `https://api.github.com/search/repositories?q=language%3A${currentLanguage.name}+created%3A${currentTimeSpan.start}..${currentTimeSpan.end}`
-
-        //         axios.get(url)
-        //             .then(res => {
-
-        //                 finalRepos.push({
-        //                     "id_language": currentLanguage.id_language,
-        //                     "id_timespan": currentTimeSpan.id_timespan,
-        //                     "total": res.data.total_count,
-
-        //                     //Fields below will not be stored in DB:
-        //                     "name": currentLanguage.name,
-        //                     "start": currentTimeSpan.start,
-        //                     "end": currentTimeSpan.end
-        //                 })
-
-        //                 console.log(`getRepos -> Language: ${languagesCount + 1}/${languages.length} --- TimeSpan: ${timeSpansCount + 1}/${timeSpans.length}`);
-
-        //                 timeSpansCount++;
-
-        //                 resolve(getRepos());
-        //             })
-        //             .catch(error => {
-        //                 console.log('Axios error: ' + error);
-
-        //             })
-
-        //     } else {
-
-        //         timeSpansCount = 0;
-
-        //         languagesCount++;
-        //         resolve(getRepos());
-        //     }
-        //     //......
-
-
-        // } else {
-
-        //     // console.log(finalRepos);
-        //     console.log(`DONE getRepos -> LanguageTimeSpans objects found: ${finalRepos.length}`);
-        //     resolve();
-        // }
-
+            console.log(`DONE getRepos -> LanguageTimeSpans objects found: ${finalRepos.length}`);
+            resolve();
+        }
 
     })//End of Promise
 }
@@ -195,44 +119,30 @@ const getRepos = () => {
 
 ////////////////////////////////////////////////
 
-
-const addLanguagesTimeSpansSingle = (id_language, id_timespan, total) => {
-
+const populateLanguagesTimeSpans = () => {
     return new Promise((resolve, reject) => {
-        let sql = `INSERT INTO LanguagesTimeSpan (id_language, id_timespan, total) VALUES ('${id_language}', '${id_timespan}', '${total}');`
 
-        connectionPool.query(sql, (error, result) => {
+        let concatenatedSQL = ''
+
+        finalRepos.forEach(item => {
+            const { id_language, id_timespan, total } = item
+
+            concatenatedSQL += `INSERT INTO LanguagesTimeSpan (id_language, id_timespan, total) VALUES ('${id_language}', '${id_timespan}', '${total}');`
+        })
+
+        connectionPool.query(concatenatedSQL, (error, result) => {
             if (error) {
-                console.log(error + 'ERROR');
                 reject(error)
             } else {
+
+                console.log('populateLanguagesTimeSpans DONE');
                 resolve()
             }
-
         })
-    })
-}
 
-const populateLanguagesTimeSpans = () => {
 
-    return new Promise((resolve, reject) => {
-        if (finalReposCount < finalRepos.length) {
 
-            let item = finalRepos[finalReposCount]
-
-            addLanguagesTimeSpansSingle(item.id_language, item.id_timespan, item.total)
-                .then(() => {
-
-                    console.log(`populateLanguagesTimeSpans -> added to DB`);
-
-                    finalReposCount++
-                    resolve(populateLanguagesTimeSpans())
-                })
-
-        } else {
-            resolve()
-        }
-    })
+    })//End promise
 }
 
 //////////////////////////////////////////////////////////////
@@ -242,10 +152,7 @@ let timeSpans = []
 let languagesCount = 0;
 let timeSpansCount = 0;
 
-
 let finalRepos = [];
-let finalReposCount = 0;
-
 
 const populateLanguagesTimeSpan = () => {
 
