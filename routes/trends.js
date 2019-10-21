@@ -22,7 +22,10 @@ router.get('/trends', (req, res) => {
         })
         .then(trends => {
 
-            if (trends.usa[0].name === languageGlobal[0].name) {
+            //CHECK HERE-----
+
+            console.log(trends);
+            if (trends[0].data[0].name === languageGlobal[0].name) {
 
                 //Response #1
                 res.send(trends)
@@ -42,7 +45,7 @@ router.get('/trends', (req, res) => {
                     i = index
                     console.log(i);
 
-                    return item.name === trends.usa[0].name
+                    return item.name === trends[0].data[0].name
                 })
 
                 languageGlobal[i] = fakeFirstPlace
@@ -215,10 +218,26 @@ const getProportionObj = (arrayOfTrends, languages) => {
         return item
     }
 
-    return {
-        usa: usa.map(mapRanking),
-        can: can.map(mapRanking)
-    }
+    // return {
+    //     usa: usa.map(mapRanking),
+    //     can: can.map(mapRanking)
+    // }
+
+    return [
+        {
+            country: 'US',
+            data: usa
+        },
+        {
+            country: 'CA',
+            data: can
+        }
+    ]
+
+    // return {
+    //     usa: usa,
+    //     can: can
+    // }
 }
 
 const mergeTrends = (trends) => {
