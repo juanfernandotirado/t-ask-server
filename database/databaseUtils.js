@@ -217,6 +217,7 @@ const getJobCategories = () => {
         FROM Jobs
         INNER JOIN JobCategories
         ON JobCategories.soc = Jobs.soc
+        WHERE Jobs.created > (SELECT MAX(start) FROM TimeSpan)
         GROUP BY JobCategories.soc
         ORDER BY totalJobs DESC
         ;`
@@ -224,7 +225,7 @@ const getJobCategories = () => {
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject(error)
-            } else {
+            } else {       
                 resolve(result)
             }
         })
