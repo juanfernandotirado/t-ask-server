@@ -87,9 +87,12 @@ const writeToFile = (obj) => {
 let lastSoc = socArray[0]
 let lastSocCount = 0
 
-const readJobsFromFile = () => {
+const readJobsFromFile = (findings) => {
 
     return new Promise((resolve, reject) => {
+
+        console.log('readJobsFromFile Start... ' + findings.length);
+        
 
         fs.createReadStream(__dirname + '/filtered_jobs.csv')
             .pipe(csv())
@@ -100,11 +103,28 @@ const readJobsFromFile = () => {
                     if (row.onet_occupation_code === lastSoc) {
                         if (lastSocCount < 15) {
 
+                            let i = -1
+                            const f = findings.filter((item, index) => {                            
+                                
+                                let check = item.id === row.hash
+
+                                if(check){
+                                    i = index
+                                    console.log(item.id +' === '+ row.hash + ' ? -> ' + check);
+                                }
+                                
+                                return check
+                            })
+
+                            if (i >= 0)
+                                delete findings[i]
+
                             array.push({
                                 hash: row.hash,
                                 country: row.country === 'USA' ? 1 : 2,
                                 created: row.created,
-                                soc: row.onet_occupation_code.replace('-', '').replace('.', '')
+                                soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
+                                findings: f
                             })
 
                             lastSocCount++
@@ -116,14 +136,34 @@ const readJobsFromFile = () => {
                         lastSocCount = 1
                         lastSoc = row.onet_occupation_code
 
+
+                        let i = -1
+                        const f = findings.filter((item, index) => {
+                            
+                            let check = item.id === row.hash
+
+                            if(check){
+                                i = index
+                                console.log(item.id +' === '+ row.hash + ' ? -> ' + check);
+                            }
+                            
+                            return check
+                        })
+
+                        if (i >= 0)
+                            delete findings[i]
+
+
                         array.push({
                             hash: row.hash,
                             country: row.country === 'USA' ? 1 : 2,
                             created: row.created,
-                            soc: row.onet_occupation_code.replace('-', '').replace('.', '')
+                            soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
+
+                            findings: f
                         })
 
-                        console.log('Added jobs to array... code: ' + lastSoc + 'Total in array: ' + array.length);
+                        // console.log('Added jobs to array... code: ' + lastSoc + 'Total in array: ' + array.length);
                         lastSocCount++
                     }
 
@@ -133,11 +173,15 @@ const readJobsFromFile = () => {
             .on('end', () => {
                 console.log('CSV file successfully processed');
 
-                resolve()
-                // writeToFile(array)
+                // resolve()
+                writeToFile(array)
             });
 
     })  //end promise
 }
 
 exports.readJobsFromFile = readJobsFromFile
+
+
+
+// readJobsFromFile()

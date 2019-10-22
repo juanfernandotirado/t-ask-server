@@ -2,5 +2,14 @@ node_modules
 .env
 database/populateTables/output
 database/populateTables/filtered_jobs.csv
+database/populateTables/job_descriptions.xml
+database/populateTables/resultFromXML.txt.xml
+
+database/populateTables/filtered_jobs_short.csv
+database/populateTables/jobTagsExtractor.js
+database/populateTables/job_descriptions_short.xml
+database/populateTables/jobs.json
+
+
 
 .DS_Store

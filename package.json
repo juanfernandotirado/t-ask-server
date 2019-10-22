@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "csv-parser": "^2.3.1",
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.3",
+    "xml2js": "^0.4.22"
   }
 }
