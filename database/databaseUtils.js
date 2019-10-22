@@ -188,7 +188,7 @@ exports.getAllTimeSpanByLanguage = getAllTimeSpanByLanguage;
 
 //////////////////////////////////////////////////////////////////////////
 
-const getJobCategories = ()=>{
+const getJobCategories = () => {
 
     return new Promise((resolve, reject) => {
 
@@ -204,15 +204,7 @@ const getJobCategories = ()=>{
             if (error) {
                 reject(error)
             } else {
-
-                let orderedJobCategories = []
-
-               for(i=0; i<=result.length; i++){
-                   if(result[i].totalJobs > result[(i+1)].totalJobs ){
-                    orderedJobCategories[0] = result[i]
-                   }
-               }
-                resolve(orderedJobCategories) 
+                resolve(result)
             }
         })
     })
