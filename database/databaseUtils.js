@@ -200,13 +200,6 @@ const getJobCategories = ()=>{
         ORDER BY totalJobs DESC
         ;`
 
-        // SELECT  COUNT(CASE WHEN Jobs.soc = 11302100 THEN 1 ELSE null END) as x,
-        // count(case when JobCategories.soc = 15111100 then 1 else null end) as y
-        // FROM JobCategories
-        // INNER JOIN Jobs
-        // ON JobCategories.soc = Jobs.soc
-        // ;
-
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject(error)

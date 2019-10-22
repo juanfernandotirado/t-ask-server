@@ -28,7 +28,7 @@ router.get('/languages/timespans', (req, res) => {
 
 ////////////////////////////////////////////////////////////////////
 
-router.get('/jobs/jobcategorieas', (req, res) => {
+router.get('/jobs/jobcategories', (req, res) => {
 
     getJobCategories()
         .then(result => {
