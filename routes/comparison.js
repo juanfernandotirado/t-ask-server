@@ -5,6 +5,7 @@ const { getLanguagesLatestCount } = require('../database/databaseUtils.js')
 const { getAllTimeSpanByLanguage } = require('../database/databaseUtils.js')
 
 const { getJobCategories } = require('../database/databaseUtils.js')
+const { getAllJobsForEachLanguages } = require('../database/databaseUtils.js')
 
 
 
@@ -31,6 +32,16 @@ router.get('/languages/timespans', (req, res) => {
 router.get('/jobs/jobcategories', (req, res) => {
 
     getJobCategories()
+        .then(result => {
+            res.send(result)
+        })
+})
+
+////////////////////////////////////////////////////////////////////
+
+router.get('/jobs/languages', (req, res) => {
+
+    getAllJobsForEachLanguages()
         .then(result => {
             res.send(result)
         })
