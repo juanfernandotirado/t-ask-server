@@ -1,21 +1,16 @@
-//Run from project root folder:
+//Run from project root folder (Either of them):
 //node -r dotenv/config database/populateTables/setup.js
 //node --require dotenv/config database/populateTables/setup.js
-//
+
 /**
- * 1. Deletes all rows from:
- * 
- * LanguagesTimeSpan
- * Languages
- * TimeSpan
- * 
- * 2. Then repopulate them.
+ * Setup file to clear and populate the database.
  */
 
 
 const { populateJobCategories } = require('./jobCategories.js');
-const { readJobsFromFile } = require('./populateJobs.js');
-const { populateJobs } = require('./populateJobs.js');
+
+const { populateJobsToFile, populateJobsLanguagesToFile } = require('./jobs/START_LAST_jobToFile.js');
+
 const { populateLanguages } = require('./languages.js');
 const { populateTimeSpans } = require('./timeSpan.js');
 const { populateLanguagesTimeSpan } = require('./languagesTimeSpan.js');
@@ -53,9 +48,10 @@ const clearTablesJobs = () => {
 
         let sql =
             ` 
-        DELETE FROM Jobs;
-        DELETE FROM JobCategories;
-        `
+            DELETE FROM JobsLanguages;
+            DELETE FROM Jobs;
+            DELETE FROM JobCategories;        
+            `
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
@@ -72,17 +68,42 @@ const clearTablesJobs = () => {
 
 
 
-clearTablesJobs()
-    .then(populateJobCategories)
-    .then(readJobsFromFile)
-    .then(populateJobs)
 
-    .then(clearTablesLanguages)
-    .then(populateLanguages)
-    .then(populateTimeSpans)
-    .then(populateLanguagesTimeSpan)
+//** ********************************** */
+//** LANGUAGES and TIMESPANS */
+//** ********************************** */
 
-    .then(result => {
-        console.log(`ALL DONE`);
-        process.exit()
-    })
+//Each populate method sends many INSERTs to the database.
+
+// clearTablesLanguages()
+//     .then(populateLanguages)
+//     .then(populateTimeSpans)
+//     .then(populateLanguagesTimeSpan)
+//     .then(r => {
+//         console.log('all done!!!');
+//     })
+
+//** ********************************** */
+//** JOBS */
+//** ********************************** */
+
+//Run each line and do MANUAL work.
+
+// 1. Clear tables:
+// clearTablesJobs()
+
+// 2. Create file with INSERT queries for all jobs
+// populateJobsToFile()
+//--->Then run the query in the website
+
+// 3. Create file with INSERT queries for all jobsLanguages
+// populateJobsLanguagesToFile()
+//--->Then run the query in the website
+//** ********************************** */
+
+//...
+
+//     .then(result => {
+//         console.log(`ALL DONE`);
+//         process.exit()
+//     })
