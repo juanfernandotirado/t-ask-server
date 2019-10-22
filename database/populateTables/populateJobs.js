@@ -84,8 +84,7 @@ const writeToFile = (obj) => {
     });
 }
 
-let lastSoc = socArray[0]
-let lastSocCount = 0
+let count = 0
 
 const readJobsFromFile = (findings) => {
 
@@ -100,42 +99,6 @@ const readJobsFromFile = (findings) => {
 
                 if ((row.country === 'USA' || row.country === 'CAN') && socArray.includes(row.onet_occupation_code)) {
 
-                    if (row.onet_occupation_code === lastSoc) {
-                        if (lastSocCount < 15) {
-
-                            let i = -1
-                            const f = findings.filter((item, index) => {                            
-                                
-                                let check = item.id === row.hash
-
-                                if(check){
-                                    i = index
-                                    console.log(item.id +' === '+ row.hash + ' ? -> ' + check);
-                                }
-                                
-                                return check
-                            })
-
-                            if (i >= 0)
-                                delete findings[i]
-
-                            array.push({
-                                hash: row.hash,
-                                country: row.country === 'USA' ? 1 : 2,
-                                created: row.created,
-                                soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
-                                findings: f
-                            })
-
-                            lastSocCount++
-
-                        } else {
-
-                        }
-                    } else {
-                        lastSocCount = 1
-                        lastSoc = row.onet_occupation_code
-
 
                         let i = -1
                         const f = findings.filter((item, index) => {
@@ -144,7 +107,13 @@ const readJobsFromFile = (findings) => {
 
                             if(check){
                                 i = index
-                                console.log(item.id +' === '+ row.hash + ' ? -> ' + check);
+
+                                if(count % 2000 == 0){
+                                    console.log('2000 jobs...');
+                                }
+
+                                count++
+                                
                             }
                             
                             return check
@@ -161,11 +130,7 @@ const readJobsFromFile = (findings) => {
                             soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
 
                             findings: f
-                        })
-
-                        // console.log('Added jobs to array... code: ' + lastSoc + 'Total in array: ' + array.length);
-                        lastSocCount++
-                    }
+                        })                
 
                 }
 
