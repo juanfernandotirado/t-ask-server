@@ -188,3 +188,34 @@ exports.getAllTimeSpanByLanguage = getAllTimeSpanByLanguage;
 
 //////////////////////////////////////////////////////////////////////////
 
+const getJobCategories = ()=>{
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT Jobs.soc, JobCategories.name, COUNT(*) AS 'totalJobs'
+        FROM Jobs
+        INNER JOIN JobCategories
+        ON JobCategories.soc = Jobs.soc
+        GROUP BY JobCategories.soc
+        ORDER BY totalJobs DESC
+        ;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+            } else {
+
+                let orderedJobCategories = []
+
+               for(i=0; i<=result.length; i++){
+                   if(result[i].totalJobs > result[(i+1)].totalJobs ){
+                    orderedJobCategories[0] = result[i]
+                   }
+               }
+                resolve(orderedJobCategories) 
+            }
+        })
+    })
+}
+
+exports.getJobCategories = getJobCategories;
