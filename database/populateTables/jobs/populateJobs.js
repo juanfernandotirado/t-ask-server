@@ -1,4 +1,4 @@
-const { connectionPool } = require('../connection.js');
+const { connectionPool } = require('../../connection.js');
 
 const socArray = [
     `11-3021.00`,
@@ -93,7 +93,7 @@ const readJobsFromFile = (findings) => {
         console.log('readJobsFromFile Start... ' + findings.length);
         
 
-        fs.createReadStream(__dirname + '/filtered_jobs.csv')
+        fs.createReadStream(__dirname + '/filtered_jobs_short.csv')
             .pipe(csv())
             .on('data', (row) => {
 
@@ -106,15 +106,14 @@ const readJobsFromFile = (findings) => {
                             let check = item.id === row.hash
 
                             if(check){
-                                i = index
-
-                                if(count % 2000 == 0){
-                                    console.log('2000 jobs...');
-                                }
-
-                                count++
-                                
+                                i = index                            
                             }
+
+                            if(count >= 2000 && count % 2000 == 0){
+                                    console.log('2000 jobs...');
+                            }
+
+                            count++
                             
                             return check
                         })
@@ -123,14 +122,15 @@ const readJobsFromFile = (findings) => {
                             delete findings[i]
 
 
-                        array.push({
-                            hash: row.hash,
-                            country: row.country === 'USA' ? 1 : 2,
-                            created: row.created,
-                            soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
+                        if(f.length > 0)
+                            array.push({
+                                hash: row.hash,
+                                country: row.country === 'USA' ? 1 : 2,
+                                created: row.created,
+                                soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
 
-                            findings: f
-                        })                
+                                findings: f
+                            })                
 
                 }
 
