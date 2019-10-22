@@ -1,5 +1,26 @@
 const { connectionPool } = require('./connection.js');
 
+const getJobIds = () => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT id_job FROM Jobs;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+
+            } else {
+            
+                resolve(result)
+            }
+
+        })
+    })
+}
+
+exports.getJobIds = getJobIds;
+
 const getLanguages = () => {
 
     return new Promise((resolve, reject) => {

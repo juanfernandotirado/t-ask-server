@@ -22,6 +22,51 @@ let array =
         `Rust`
     ]
 
+
+const getLanguagesObj = () => {
+
+    return [
+        { name: `Python`, tags: [`Python`] },
+        { name: `Java`, tags: getVariations('Java') },
+        { name: `Javascript`, tags: [`Javascript`] },
+        { name: `C#`, tags: [`C#`] },
+        { name: `PHP`, tags: [`PHP`] },
+        { name: `C++`, tags: [`C++`] },
+        { name: `R`, tags: getVariations('R'), case: true },
+        { name: `Objective-C`, tags: [`Objective-C`] },
+        { name: `Swift`, tags: getVariations('Swift')},
+        { name: `Matlab`, tags: [`Matlab`] },
+        { name: `TypeScript`, tags: [`TypeScript`] },
+        { name: `Kotlin`, tags: [`Kotlin`] },
+        { name: `Ruby`, tags: [`Ruby`] },
+        { name: `visual-basic`, tags: [`visual-basic`] },
+        { name: `Go`, tags: getVariations('Go'), case: true },
+        { name: `Rust`, tags: [`Rust`] }
+    ]
+}
+
+module.exports.getLanguagesObj = getLanguagesObj
+
+
+const getVariations = (item) => {
+    return [
+        ` ${item} `,
+        ` ${item}.`,
+        ` ${item},`,
+        ` ${item}:`,
+        ` ${item}/`,
+        ` ${item}-`,
+        ` ${item};`,
+        `(${item})`,
+        ` ${item})`,
+        `(${item},`
+    ]
+}
+
+module.exports.getLanguagesObj = getLanguagesObj
+
+//////////////////////////////////////////////////////////////////
+
 const populateLanguages = () => {
     return new Promise((resolve, reject) => {
 
