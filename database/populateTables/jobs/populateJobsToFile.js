@@ -49,6 +49,7 @@ const { getIdTimeSpan } = require('../timeSpan.js');
 
 
 
+
 let count = 0
 
 const writeJobsToFile = (findings) => {
@@ -85,16 +86,25 @@ const writeJobsToFile = (findings) => {
                         delete findings[i]
 
 
-                    if (f.length > 0)
-                        array.push({
-                            hash: row.hash,
-                            country: row.country === 'USA' ? 1 : 2,
-                            created: row.created,
-                            soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
-                            id_timespan: getIdTimeSpan(73, row.created),
+                    if (f.length > 0) {
 
-                            findings: f
-                        })
+                        //NOTE - We are ignoring ALL jobs before and after the timespans we determined
+                        let timeSpanId = getIdTimeSpan(73, row.created)
+
+                        if (timeSpanId >= 73) {
+                            array.push({
+                                hash: row.hash,
+                                country: row.country === 'USA' ? 1 : 2,
+                                created: row.created,
+                                soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
+                                id_timespan: timeSpanId,
+
+                                findings: f
+                            })
+                        }
+
+                    }
+
 
                 }
 

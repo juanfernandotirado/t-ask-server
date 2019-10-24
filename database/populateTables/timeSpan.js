@@ -12,7 +12,7 @@ let s2 = `-06-30`
 let e1 = `-07-01`
 let e2 = `-12-31`
 
-for (let i = 2015; i < 2019; i++) {
+for (let i = 2015; i < 2020; i++) {
     start.push(i + s1)
     end.push(i + s2)
 }
@@ -59,9 +59,13 @@ const getIdTimeSpan = (startId = 0, created) => {
     start.find((s, index) => {
         let e = end[index]
 
-        indexFound = index
+        let check = created >= new Date(s) && created <= new Date(e)
 
-        return created >= new Date(s) && created <= new Date(e)
+        if (check) {
+            indexFound = index
+        }
+
+        return check
     })
 
     return indexFound + startId

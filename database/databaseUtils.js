@@ -11,7 +11,7 @@ const getJobIds = () => {
                 reject(error)
 
             } else {
-            
+
                 resolve(result)
             }
 
@@ -225,7 +225,7 @@ const getJobCategories = () => {
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject(error)
-            } else {       
+            } else {
                 resolve(result)
             }
         })
