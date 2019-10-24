@@ -252,7 +252,7 @@ const getAllJobsForEachLanguages = () => {
             INNER JOIN Languages
             ON JobsLanguages.id_Language = Languages.id_Language
 
-            GROUP BY JobsLanguages.id_language
+            GROUP BY JobsLanguages.id_language, TimeSpan.id_timespan
             
             ORDER BY TimeSpan.id_timespan DESC
 
@@ -262,7 +262,7 @@ const getAllJobsForEachLanguages = () => {
             if (error) {
                 reject(error)
             } else {
-                console.log(result);
+                //console.log(result);
 
                 let idArrays = result.map(item => {
                     return item.id_language
@@ -276,6 +276,9 @@ const getAllJobsForEachLanguages = () => {
                 })
 
                 let finalArray = idsArrayUniques.map(item => {
+
+                    console.log(item);
+                    
 
                     const languageObjectFull = result.find(itemX => {
                         return itemX.id_language == item
