@@ -254,7 +254,7 @@ const getAllJobsForEachLanguages = () => {
 
             GROUP BY JobsLanguages.id_language, TimeSpan.id_timespan
             
-            ORDER BY TimeSpan.id_timespan DESC
+            ORDER BY Languages.id_Language ASC, TimeSpan.start ASC
 
             ;`
 
