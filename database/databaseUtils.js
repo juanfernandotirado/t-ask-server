@@ -240,20 +240,21 @@ const getAllJobsForEachLanguages = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT JobsLanguages.id_language, LanguagesTimeSpan.id_timespan, Jobs.id_job
+        let sql = `SELECT JobsLanguages.id_language, Jobs.id_timespan, TimeSpan.start, TimeSpan.end, Languages.name,COUNT (*) AS 'totalJobs'
             FROM Jobs
+
+            INNER JOIN TimeSpan
+            ON Jobs.id_timespan = TimeSpan.id_timespan
             
             INNER JOIN JobsLanguages
             ON Jobs.id_job = JobsLanguages.id_job
 
-            INNER JOIN LanguagesTimeSpan
-            ON JobsLanguages.id_language = LanguagesTimeSpan.id_language
+            INNER JOIN Languages
+            ON JobsLanguages.id_Language = Languages.id_Language
 
-            INNER JOIN TimeSpan
-            ON LanguagesTimeSpan.id_timespan = TimeSpan.id_timespan
-
+            GROUP BY JobsLanguages.id_language
             
-            ORDER BY LanguagesTimeSpan.id_timespan DESC
+            ORDER BY TimeSpan.id_timespan DESC
 
             ;`
 
