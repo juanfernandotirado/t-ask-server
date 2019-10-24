@@ -240,50 +240,47 @@ const getAllJobsForEachLanguages = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT *
-            FROM LanguagesTimeSpan
+        let sql = `SELECT JobsLanguages.id_language, LanguagesTimeSpan.id_timespan, Jobs.id_job
+            FROM Jobs
             
-            INNER JOIN TimeSpan
-            ON TimeSpan.id_timespan = LanguagesTimeSpan.id_timespan
+            INNER JOIN JobsLanguages
+            ON Jobs.id_job = JobsLanguages.id_job
 
-            INNER JOIN Languages
-            ON Languages.id_language = LanguagesTimeSpan.id_language
+            INNER JOIN LanguagesTimeSpan
+            ON JobsLanguages.id_language = LanguagesTimeSpan.id_language
+
+            INNER JOIN TimeSpan
+            ON LanguagesTimeSpan.id_timespan = TimeSpan.id_timespan
+
+            
+            ORDER BY LanguagesTimeSpan.id_timespan DESC
+
             ;`
+
+            // `SELECT LanguagesTimeSpan.id_language, TimeSpan.id_timespan, COUNT(*) AS 'totalJobs'
+            // FROM Jobs
+                
+            // INNER JOIN JobsLanguages
+            // ON Jobs.id_job = JobsLanguages.id_job
+    
+            // INNER JOIN LanguagesTimeSpan
+            // ON JobsLanguages.id_language = LanguagesTimeSpan.id_language
+    
+            // INNER JOIN TimeSpan
+            // ON LanguagesTimeSpan.id_timespan = TimeSpan.id_timespan
+
+            // WHERE Jobs.created BETWEEN TimeSpan.start AND TimeSpan.end
+    
+            // GROUP BY LanguagesTimeSpan.id_language, TimeSpan.id_timespan
+            // ORDER BY LanguagesTimeSpan.id_language DESC
+    
+            // ;`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject(error)
             } else {
-
-                console.log(result);
-
-                let idArrays = result.map(item => {
-                    return item.id_language
-                })
-
-                let idsArrayUniques = []
-
-                idArrays.forEach(item => {
-                    if (!idsArrayUniques.includes(item))
-                        idsArrayUniques.push(item)
-                })
-
-                let finalArray = idsArrayUniques.map(item => {
-
-                    const languageObjectFull = result.find(itemX => {
-                        return itemX.id_language == item
-                    })
-
-                    const languageObj = {
-                        id_language: languageObjectFull.id_language,
-                        name: languageObjectFull.name,
-                        description: languageObjectFull.description
-                    }
-
-                    return getAllForLanguage(languageObj, result)
-                })
-
-                resolve(finalArray)
+                resolve(result)
             }
         })
     })
