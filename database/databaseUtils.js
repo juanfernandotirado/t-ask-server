@@ -233,3 +233,58 @@ const getJobCategories = () => {
 }
 
 exports.getJobCategories = getJobCategories;
+
+////////////////////////////////////////////////////////////////////
+
+const getAllJobsForEachLanguages = () => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT JobsLanguages.id_language, Jobs.id_timespan, TimeSpan.start, TimeSpan.end, Languages.name,COUNT (*) AS 'totalJobs'
+            FROM Jobs
+
+            INNER JOIN TimeSpan
+            ON Jobs.id_timespan = TimeSpan.id_timespan
+            
+            INNER JOIN JobsLanguages
+            ON Jobs.id_job = JobsLanguages.id_job
+
+            INNER JOIN Languages
+            ON JobsLanguages.id_Language = Languages.id_Language
+
+            GROUP BY JobsLanguages.id_language
+            
+            ORDER BY TimeSpan.id_timespan DESC
+
+            ;`
+
+            // `SELECT LanguagesTimeSpan.id_language, TimeSpan.id_timespan, COUNT(*) AS 'totalJobs'
+            // FROM Jobs
+                
+            // INNER JOIN JobsLanguages
+            // ON Jobs.id_job = JobsLanguages.id_job
+    
+            // INNER JOIN LanguagesTimeSpan
+            // ON JobsLanguages.id_language = LanguagesTimeSpan.id_language
+    
+            // INNER JOIN TimeSpan
+            // ON LanguagesTimeSpan.id_timespan = TimeSpan.id_timespan
+
+            // WHERE Jobs.created BETWEEN TimeSpan.start AND TimeSpan.end
+    
+            // GROUP BY LanguagesTimeSpan.id_language, TimeSpan.id_timespan
+            // ORDER BY LanguagesTimeSpan.id_language DESC
+    
+            // ;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(result)
+            }
+        })
+    })
+}
+
+exports.getAllJobsForEachLanguages = getAllJobsForEachLanguages;
