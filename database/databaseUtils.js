@@ -252,36 +252,48 @@ const getAllJobsForEachLanguages = () => {
             INNER JOIN Languages
             ON JobsLanguages.id_Language = Languages.id_Language
 
-            GROUP BY JobsLanguages.id_language
+            GROUP BY JobsLanguages.id_language, TimeSpan.id_timespan
             
-            ORDER BY TimeSpan.id_timespan DESC
+            ORDER BY Languages.id_Language ASC, TimeSpan.start ASC
 
             ;`
-
-            // `SELECT LanguagesTimeSpan.id_language, TimeSpan.id_timespan, COUNT(*) AS 'totalJobs'
-            // FROM Jobs
-                
-            // INNER JOIN JobsLanguages
-            // ON Jobs.id_job = JobsLanguages.id_job
-    
-            // INNER JOIN LanguagesTimeSpan
-            // ON JobsLanguages.id_language = LanguagesTimeSpan.id_language
-    
-            // INNER JOIN TimeSpan
-            // ON LanguagesTimeSpan.id_timespan = TimeSpan.id_timespan
-
-            // WHERE Jobs.created BETWEEN TimeSpan.start AND TimeSpan.end
-    
-            // GROUP BY LanguagesTimeSpan.id_language, TimeSpan.id_timespan
-            // ORDER BY LanguagesTimeSpan.id_language DESC
-    
-            // ;`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject(error)
             } else {
-                resolve(result)
+                //console.log(result);
+
+                let idArrays = result.map(item => {
+                    return item.id_language
+                })
+
+                let idsArrayUniques = []
+
+                idArrays.forEach(item => {
+                    if (!idsArrayUniques.includes(item))
+                        idsArrayUniques.push(item)
+                })
+
+                let finalArray = idsArrayUniques.map(item => {
+
+                    console.log(item);
+                    
+
+                    const languageObjectFull = result.find(itemX => {
+                        return itemX.id_language == item
+                    })
+
+                    const languageObj = {
+                        id_language: languageObjectFull.id_language,
+                        name: languageObjectFull.name,
+                        description: languageObjectFull.description
+                    }
+
+                    return getAllForLanguage(languageObj, result)
+                })
+
+                resolve(finalArray)
             }
         })
     })
