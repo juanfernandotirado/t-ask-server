@@ -15,9 +15,9 @@ const populateJobsToFile = () => {
         let textCSV = ''
 
         jobs.forEach(item => {
-            const { hash, country, created, soc } = item
+            const { hash, country, created, soc, id_timespan } = item
             textCSV +=
-                `INSERT INTO Jobs (id_location, created, soc) VALUES ('${country}', '${created}', '${soc}' );`
+                `INSERT INTO Jobs (id_location, created, soc, id_timespan) VALUES ('${country}', '${created}', '${soc}', '${id_timespan}' );`
         })
 
         console.log('populatingJobs... Creating file...');

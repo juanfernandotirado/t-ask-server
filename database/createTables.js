@@ -18,7 +18,8 @@ CREATE TABLE Jobs (
     soc int,
     PRIMARY KEY (id_job),
     FOREIGN KEY (soc) REFERENCES JobCategories(soc),
-    FOREIGN KEY (id_location) REFERENCES Location(id_location)
+    FOREIGN KEY (id_location) REFERENCES Location(id_location),
+    FOREIGN KEY (id_timespan) REFERENCES TimeSpan(id_timespan)
     );
   
     CREATE TABLE TimeSpan (

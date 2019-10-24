@@ -45,6 +45,10 @@ const array = []
 const csv = require('csv-parser');
 const fs = require('fs');
 
+const { getIdTimeSpan } = require('../timeSpan.js');
+
+
+
 let count = 0
 
 const writeJobsToFile = (findings) => {
@@ -87,6 +91,7 @@ const writeJobsToFile = (findings) => {
                             country: row.country === 'USA' ? 1 : 2,
                             created: row.created,
                             soc: row.onet_occupation_code.replace('-', '').replace('.', ''),
+                            id_timespan: getIdTimeSpan(73, row.created),
 
                             findings: f
                         })

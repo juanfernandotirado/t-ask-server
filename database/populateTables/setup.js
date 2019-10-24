@@ -92,11 +92,17 @@ const clearTablesJobs = () => {
 // 1. Clear tables:
 // clearTablesJobs()
 
-// 2. Create file with INSERT queries for all jobs
+// 2. To extract Jobs into file: [WILL TAKE FOREVER]
+// node database/populateTables/jobs/START_FIRST_jobTagsExtractor.js 
+
+// 3. Add job categories to database (Automatic)
+// populateJobCategories()
+
+// 4. Create file with INSERT queries for all jobs
 // populateJobsToFile()
 //--->Then run the query in the website
 
-// 3. Create file with INSERT queries for all jobsLanguages
+// 5. Create file with INSERT queries for all jobsLanguages
 // populateJobsLanguagesToFile()
 //--->Then run the query in the website
 //** ********************************** */

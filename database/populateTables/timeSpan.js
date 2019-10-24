@@ -12,7 +12,7 @@ let s2 = `-06-30`
 let e1 = `-07-01`
 let e2 = `-12-31`
 
-for (let i = 2015; i < 2020; i++) {
+for (let i = 2015; i < 2019; i++) {
     start.push(i + s1)
     end.push(i + s2)
 }
@@ -37,9 +37,9 @@ const populateTimeSpans = () => {
             if (error) {
                 reject(error)
             } else {
-                
+
                 console.log('populateTimeSpans DONE');
-                
+
                 resolve()
             }
         })
@@ -49,3 +49,22 @@ const populateTimeSpans = () => {
 
 
 exports.populateTimeSpans = populateTimeSpans
+
+
+const getIdTimeSpan = (startId = 0, created) => {
+
+    created = new Date(created)
+
+    let indexFound = -1
+    start.find((s, index) => {
+        let e = end[index]
+
+        indexFound = index
+
+        return created >= new Date(s) && created <= new Date(e)
+    })
+
+    return indexFound + startId
+
+}
+exports.getIdTimeSpan = getIdTimeSpan
