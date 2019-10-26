@@ -262,7 +262,7 @@ const getAllJobsForEachLanguages = () => {
             if (error) {
                 reject(error)
             } else {
-                
+
                 let idArrays = result.map(item => {
                     return item.id_language
                 })
@@ -274,7 +274,7 @@ const getAllJobsForEachLanguages = () => {
                         idsArrayUniques.push(item)
                 })
 
-                let finalArray = idsArrayUniques.map(item => {                    
+                let finalArray = idsArrayUniques.map(item => {
 
                     const languageObjectFull = result.find(itemX => {
                         return itemX.id_language == item
@@ -343,7 +343,7 @@ const getAllJobsForEachLocation = () => {
                                 idsArrayUniques.push(item)
                         })
 
-                        let finalArray = idsArrayUniques.map(item => {                    
+                        let finalArray = idsArrayUniques.map(item => {
 
                             const languageObjectFull = result.find(itemX => {
                                 return itemX.id_language == item
@@ -358,7 +358,7 @@ const getAllJobsForEachLocation = () => {
                             return getAllForLanguage(languageObj, result)
                         })
 
-                        resolve(finalArray)
+                        resolve(getFinalResponse(finalArray))
                     }
                 })
             }
@@ -367,3 +367,29 @@ const getAllJobsForEachLocation = () => {
 }
 
 exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
+
+/**
+ * Mapping the final response to follow the same pattern
+ * as in "/comparison/trends"
+ */
+const getFinalResponse = (finalArray) => {
+    return finalArray.map(item => {
+
+        item.timeSpansArray.map(itemTimeSpan => {
+
+            itemTimeSpan.countries = [
+                { country: "US", totalJobs: itemTimeSpan.jobsUS },
+                { country: "CA", totalJobs: itemTimeSpan.jobsCA }
+            ]
+
+            // itemTimeSpan.totalJobs = itemTimeSpan.jobsUS + itemTimeSpan.jobsCA
+
+            delete itemTimeSpan.jobsUS
+            delete itemTimeSpan.jobsCA
+
+            return itemTimeSpan
+        })
+
+        return item
+    })
+}

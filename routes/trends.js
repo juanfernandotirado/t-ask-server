@@ -100,14 +100,10 @@ const startRequestingTrends = (languages) => {
             // delete item.description
         })
 
-        console.log(languages);
-
         /** Another promise chain - RESULT HERE */
 
         getComparisonArrays(languages)
-            .then(arrayComparisons => {
-
-                console.log(arrayComparisons);
+            .then(arrayComparisons => {        
 
                 getAllTrends([...arrayComparisons])
                     .then(arrayOfTrends => {
