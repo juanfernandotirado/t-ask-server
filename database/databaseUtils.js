@@ -303,7 +303,7 @@ const getAllJobsForEachLocation = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT JobsLanguages.id_language, Jobs.id_timespan, TimeSpan.start, TimeSpan.end, Languages.name, count(case when Jobs.id_location = 1 then 1 else null end) as jobsUS, count(case when Jobs.id_location = 2 then 1 else null end) as jobsCA
+        let sql = `SELECT JobsLanguages.id_language, Languages.name, count(case when Jobs.id_location = 1 then 1 else null end) as jobsUS, count(case when Jobs.id_location = 2 then 1 else null end) as jobsCA
         FROM Jobs
 
         INNER JOIN TimeSpan
@@ -360,9 +360,9 @@ const getAllJobsForEachLocation = () => {
 
                         resolve(getFinalResponse(finalArray))
                     }
-                })
+                })  //End inner query
             }
-        })
+        })  //End Outer Query
     })
 }
 
@@ -373,23 +373,42 @@ exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
  * as in "/comparison/trends"
  */
 const getFinalResponse = (finalArray) => {
-    return finalArray.map(item => {
 
-        item.timeSpansArray.map(itemTimeSpan => {
+    let finalArrayCountries = []
 
-            itemTimeSpan.countries = [
-                { country: "US", totalJobs: itemTimeSpan.jobsUS },
-                { country: "CA", totalJobs: itemTimeSpan.jobsCA }
-            ]
+    let objUS = {
+        country: "US",
+        data: []
+    }
 
-            // itemTimeSpan.totalJobs = itemTimeSpan.jobsUS + itemTimeSpan.jobsCA
+    let objCA = {
+        country: "CA",
+        data: []
+    }
 
-            delete itemTimeSpan.jobsUS
-            delete itemTimeSpan.jobsCA
 
-            return itemTimeSpan
+    //...
+    finalArray.forEach(item => {
+
+        objUS.data.push({
+            id_language: item.language.id_language,
+            name: item.language.name,
+            totalJobs: item.timeSpansArray[0].jobsUS
         })
 
-        return item
+        objCA.data.push({
+            id_language: item.language.id_language,
+            name: item.language.name,
+            totalJobs: item.timeSpansArray[0].jobsCA
+        })
+
     })
+    //...
+
+    finalArrayCountries.push(objUS)
+    finalArrayCountries.push(objCA)
+
+
+    return finalArrayCountries
+
 }
