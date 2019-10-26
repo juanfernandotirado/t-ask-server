@@ -6,6 +6,7 @@ const { getAllTimeSpanByLanguage } = require('../database/databaseUtils.js')
 
 const { getJobCategories } = require('../database/databaseUtils.js')
 const { getAllJobsForEachLanguages } = require('../database/databaseUtils.js')
+const { getAllJobsForEachLocation } = require('../database/databaseUtils.js')
 
 
 
@@ -42,6 +43,16 @@ router.get('/jobs/jobcategories', (req, res) => {
 router.get('/jobs/languages', (req, res) => {
 
     getAllJobsForEachLanguages()
+        .then(result => {
+            res.send(result)
+        })
+})
+
+////////////////////////////////////////////////////////////////////
+
+router.get('/jobs/locations', (req, res) => {
+
+    getAllJobsForEachLocation()
         .then(result => {
             res.send(result)
         })

@@ -262,8 +262,7 @@ const getAllJobsForEachLanguages = () => {
             if (error) {
                 reject(error)
             } else {
-                //console.log(result);
-
+                
                 let idArrays = result.map(item => {
                     return item.id_language
                 })
@@ -275,10 +274,7 @@ const getAllJobsForEachLanguages = () => {
                         idsArrayUniques.push(item)
                 })
 
-                let finalArray = idsArrayUniques.map(item => {
-
-                    console.log(item);
-                    
+                let finalArray = idsArrayUniques.map(item => {                    
 
                     const languageObjectFull = result.find(itemX => {
                         return itemX.id_language == item
@@ -300,3 +296,74 @@ const getAllJobsForEachLanguages = () => {
 }
 
 exports.getAllJobsForEachLanguages = getAllJobsForEachLanguages;
+
+//////////////////////////////////////////////////////////////////////////
+
+const getAllJobsForEachLocation = () => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT JobsLanguages.id_language, Jobs.id_timespan, TimeSpan.start, TimeSpan.end, Languages.name, count(case when Jobs.id_location = 1 then 1 else null end) as jobsUS, count(case when Jobs.id_location = 2 then 1 else null end) as jobsCA
+        FROM Jobs
+
+        INNER JOIN TimeSpan
+        ON Jobs.id_timespan = TimeSpan.id_timespan
+            
+        INNER JOIN JobsLanguages
+        ON Jobs.id_job = JobsLanguages.id_job
+
+        INNER JOIN Languages
+        ON JobsLanguages.id_Language = Languages.id_Language
+
+        WHERE start = (SELECT MAX(start) FROM TimeSpan)
+
+        GROUP BY JobsLanguages.id_language, TimeSpan.id_timespan
+            
+        ORDER BY Languages.id_Language ASC, TimeSpan.start ASC
+
+        ;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+            } else {
+                connectionPool.query(sql, (error, result) => {
+                    if (error) {
+                        reject(error)
+                    } else {
+
+                        let idArrays = result.map(item => {
+                            return item.id_language
+                        })
+
+                        let idsArrayUniques = []
+
+                        idArrays.forEach(item => {
+                            if (!idsArrayUniques.includes(item))
+                                idsArrayUniques.push(item)
+                        })
+
+                        let finalArray = idsArrayUniques.map(item => {                    
+
+                            const languageObjectFull = result.find(itemX => {
+                                return itemX.id_language == item
+                            })
+
+                            const languageObj = {
+                                id_language: languageObjectFull.id_language,
+                                name: languageObjectFull.name,
+                                description: languageObjectFull.description
+                            }
+
+                            return getAllForLanguage(languageObj, result)
+                        })
+
+                        resolve(finalArray)
+                    }
+                })
+            }
+        })
+    })
+}
+
+exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
