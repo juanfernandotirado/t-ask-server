@@ -5,67 +5,91 @@ const googleTrends = require('google-trends-api');
 const { getComparisonArrays, getValuesInProportion } = require('./trendsUtils.js')
 const { getLanguages, getLanguagesLatestCount } = require('../database/databaseUtils.js')
 
-//TODO - Redo searches for CA (atm just US is being checked)
-//TODO - Cache trend search result for reuse.
 //TODO - Refactor hardcoded date for trends
+
+let cachedTrends;
+let lastRequestTime;
 
 router.get('/trends', (req, res) => {
 
-    let languageGlobal;
+    if (lastRequestTime && lastRequestTime > new Date()) {
+        console.log("Cache!");
 
-    getLanguagesLatestCount()
-        // getLanguages()
-        .then(langs => {
-            languageGlobal = langs
+        sendServerResponse(res, cachedTrends)
+    } else {
 
-            return start(languageGlobal)
-        })
-        .then(trends => {
+        console.log("Request again");
+        let languageGlobal;
 
-            //CHECK HERE-----
+        getLanguagesLatestCount()
+            // getLanguages()
+            .then(langs => {
+                languageGlobal = langs
 
-            console.log(trends);
-            if (trends[0].data[0].name === languageGlobal[0].name) {
+                return startRequestingTrends(languageGlobal)
+            })
+            .then(trends => {
 
-                //Response #1
-                res.send(trends)
+                //CHECK HERE-----
 
-            } else {
+                if (trends[0].data[0].name === languageGlobal[0].name) {
 
-                //....................//....................//....................
-                // If the base programming language languageGlobal[0] was NOT
-                // The most popular, the update the order of the languages,
-                // And search again.
-                //....................//....................//....................
+                    //Response #1
+                    sendServerResponse(res, trends)
 
-                let fakeFirstPlace = languageGlobal[0]
+                    //Register last requested date:
+                    lastRequestTime = new Date()
+                    lastRequestTime = lastRequestTime.setDate(lastRequestTime.getDate() + 1)
 
-                let i = 0
-                languageGlobal[0] = languageGlobal.find((item, index) => {
-                    i = index
-                    console.log(i);
+                } else {
 
-                    return item.name === trends[0].data[0].name
-                })
+                    //....................//....................//....................
+                    // If the base programming language languageGlobal[0] was NOT
+                    // The most popular, the update the order of the languages,
+                    // And search again.
+                    //....................//....................//....................
 
-                languageGlobal[i] = fakeFirstPlace
+                    let fakeFirstPlace = languageGlobal[0]
 
-                //Search again:
-                start(languageGlobal)
-                    .then(r => {
+                    let i = 0
+                    languageGlobal[0] = languageGlobal.find((item, index) => {
+                        i = index
+                        // console.log(i);
 
-                        //Response #2
-                        res.send(r)
+                        return item.name === trends[0].data[0].name
                     })
-            }
-            //....................//....................//....................
 
-        })
+                    languageGlobal[i] = fakeFirstPlace
+
+                    //Search again:
+                    startRequestingTrends(languageGlobal)
+                        .then(r => {
+
+                            //Response #2                            
+                            sendServerResponse(res, r)
+
+                            //Register last requested date:
+                            lastRequestTime = new Date()
+                            lastRequestTime = lastRequestTime.setDate(lastRequestTime.getDate() + 1)
+                        })
+                }
+                //....................//....................//....................
+
+            })
+    }
 })
+
+const sendServerResponse = (res, trends) => {
+
+    //Cache last response locally:
+    cachedTrends = trends
+
+    res.send(trends)
+}
 
 module.exports.trendsRouter = router;
 
-const start = (languages) => {
+const startRequestingTrends = (languages) => {
     return new Promise((resolve, reject) => {
 
         languages.forEach(item => {
@@ -116,9 +140,6 @@ const getAllTrends = (array, resultArray = []) => {
 
         return getTrendLanguages(languagesArray)
             .then(r => {
-
-                console.log('<---');
-                console.log(r);
 
                 resultArray.push(r)
 
