@@ -1,0 +1,76 @@
+﻿Python,Unlike many other languages, Python does not use curly brackets to delimit blocks, and semicolons after statements are optional.
+Python,Python’s implementation was started in December 1989 by Guido van Rossum.
+Python,Guido van Rossum, the creator of Python, has been given the title Benevolent Dictator for Life(BDFL) by the Python community.
+Python,Python reached version 1.0 in January 1994.
+Python,Python was first released in the version 0.9.0 in February 1991.
+Python,Python is commonly used in artificial intelligence projects.
+Python,Python’s core philosophy is summarized in the document The Zen of Python (PEP 20).
+Python,“Explicit is better than implicit.” (The Zen of Python)
+Python,“Simple is better than complex.” (The Zen of Python)
+Python,“Readability counts.” (The Zen of Python)
+Python,Python’s name is a tribute to the British comedy group Monty Python.
+Python,"Python embraces a ""there should be one—and preferably only one—obvious way to do it"" design philosophy."
+Python,To say that code is pythonic is to say that it uses Python idioms well, that it is natural or shows fluency in the language.
+Python,Python uses whitespace indentation, rather than curly brackets or keywords, to delimit blocks. An increase in indentation comes after certain statements; a decrease in indentation signifies the end of the current block.
+Python,“Hello world” program using Python: print('Hello, world!')
+Python,The social news networking site Reddit is written entirely in Python.
+Java,Java is intended to let application developers write once, run anywhere (WORA).
+Java,The syntax of Java is similar to C and C++
+Java,Java is one of the most popular programming languages for client-server web applications.
+Java,Java was originally developed by James Gosling at Sun Microsystems.
+Java,Java first appeared on May 23, 1995.
+Java,Java was originally designed for interactive television, but it was too advanced for the digital cable television industry at the time.
+Java,Java was initially called Oak after an oak tree that stood outside its creator’s office. Later the project went by the name Green and was finally renamed Java, from Java coffee.
+Java,Java has a mascot named Duke.
+Java,“It must be simple, object-oriented, and familiar.” One of Java’s primary goals.
+Java,“It must be robust and secure.” One of Java’s primary goals.
+Java,“It must execute with high performance.” One of Java’s primary goals.
+Java,"“Hello world” program using Java:  public class HelloWorldApp { public static void main(String[] args) {System.out.println(""Hello World!""); // Prints the string to the console.}}"
+Java,The Java language is a key pillar in Android, an open-source mobile operating system.
+Java,Oracle supplies the Java platform for use with Java.
+Java,The use of Java-related technology in Android led to a legal dispute between Oracle and Google in 2012.
+Java,Source files must be named after the public class they contain, appending the suffix .java, for example, HelloWorldApp.java.
+Javascript,JavaScript has curly-bracket syntax, dynamic typing, prototype-based object-orientation, and first-class functions.
+Javascript,Scripts written in Vanilla JS are plain JavaScript code.
+Javascript,JavaScript was influenced by programming languages such as Self and Scheme.
+Javascript,Javascript first appeared on December 4, 1995.
+Javascript,Although Javascript was developed under the name Mocha, the language was officially called LiveScript.
+Javascript,Brendan Eich, the creator of Javascript, wrote a prototype of the language in 10 days.
+Javascript,Javascript’s name caused confusion, giving the impression that the language was a spin-off of the Java programming language.
+Javascript,Unlike many object-oriented languages, in Javascript, there is no distinction between a function definition and a method definition.
+Javascript,Variables in JavaScript can be defined using either the var, let or const keywords.
+Javascript,"“Hello world” program using Javascript: console.log(""Hello World!""); // Prints the string to the console."
+Javascript,In JavaScript, objects are created in the same way as functions; this is known as a function object.
+Javascript,The most common use of JavaScript is to add client-side behavior to HTML pages, also known as Dynamic HTML (DHTML).
+Javascript,Adobe's Acrobat and Adobe Reader support JavaScript in PDF files.
+Javascript,Tools in the Adobe Creative Suite, including Photoshop, Illustrator, After Effects, Dreamweaver, and InDesign, allow scripting through JavaScript.
+Javascript,JavaScript is loaded as a human-readable source code.
+C#,C# was developed around 2000 by Microsoft as part of its .NET initiative.
+C#,C# was designed by Anders Hejlsberg.
+C#,"C# was originally named Cool, which stood for ""C-like Object-Oriented Language""."
+C#,C# used to have a mascot called Andy (named after its creator Anders Hejlsberg).
+C#,"The name ""C sharp"" was inspired by the musical notation where a sharp (#) indicates that the written note should be made a semitone higher in pitch."
+C#,"The sharp symbol also resembles a ligature of four ""+"" symbols (in a two-by-two grid), further implying that C# is an increment of C++."
+C#,The core syntax of C# language is similar to that of other C-style languages such as C, C++, and Java.
+C#,By design, C# is the programming language that most directly reflects the underlying Common Language Infrastructure (CLI).
+C#,The C# language does not allow for global variables or functions. All methods and members must be declared within classes.
+C#,Local variables cannot shadow variables of the enclosing block, unlike C and C++.
+C#,"“Hello world” program using C#:using System; class Program {public static void Main(string[] args) {Console.WriteLine(""Hello, world!"");}}"
+C#,Unlike C++, C# does not support multiple inheritances.
+C#,C# has a unified type system. This unified type system is called the Common Type System (CTS). based on this, C# divides data types into either reference types or value types.
+C#,C# language is suitable for writing applications for embedded systems.
+C#,C# support for internationalization.
+PHP,PHP was originally created by Rasmus Lerdorf in 1994.
+PHP,“Hello world” program using PHP: <?='Hello world';
+C++,"In 1979, Bjarne Stroustrup, a Danish computer scientist, began work on ""C with Classes"", the predecessor to C++."
+C++,"The name of C++ comes from C's ++ operator (which increments the value of a variable) and a common naming convention of using ""+"" to indicate an enhanced computer program."
+C++,"“Hello world” program using C++: #include <iostream> int main() { std::cout << ""Hello, world!\n"";}"
+R,R was created by Ross Ihaka and Robert Gentleman.
+R,R is named after the first names of the first two R authors (Ross Ihaka and Robert Gentleman).
+R,R first appeared in August 1993.
+Objective-C,Objective-C was the main programming language supported by Apple for the macOS, iOS and iPadOS operating systems, and their respective application programming interfaces (APIs) Cocoa and Cocoa Touch until the introduction of Swift.
+Objective-C,Objective-C was created primarily by Brad Cox and Tom Love in the early 1980s.
+Objective-C,"Hello World! In Objective-C: #import <Foundation/Foundation.h> int main(int argc, const char * argv[]) { @autoreleasepool { NSLog(@""Hello, World!"");} return 0; }"
+Swift,Swift was introduced at Apple's 2014 Worldwide Developers Conference (WWDC).
+Swift,Swift is named after the birds swift to resemble their high speed.
+Swift,“Hello world” program using Swift: import Swift print(“Hello, World!”)
