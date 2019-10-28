@@ -3,8 +3,8 @@
  * And creates an array of jobs,
  * With each having an array of languages. 
  * 
- * node -r dotenv/config database/populateTables/jobs/aTWOJobsXmlToFile.js
- * node --require dotenv/config database/populateTables/jobs/aTWOJobsXmlToFile.js 
+ * node -r dotenv/config database/populateTables/jobs/a2JobsXmlToFile.js
+ * node --require dotenv/config database/populateTables/jobs/a2JobsXmlToFile.js 
  */
 
 ////////////////////////////////////////////////////////////

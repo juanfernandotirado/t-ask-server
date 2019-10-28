@@ -8,21 +8,20 @@ const populateJobsToFile = () => {
         console.log('populatingJobs...');
 
         //Gets all jobs with hashes from file:
-        const fileContent = fs.readFileSync(__dirname + "/output/jobs.json");
-        const jobs = JSON.parse(fileContent)
+        const jobs = require(__dirname + "/output/jobsFINAL.json");
 
         //Then save jobs on database:
-        let textCSV = ''
+        let textINSERT = ''
 
         jobs.forEach(item => {
             const { hash, country, created, soc, id_timespan } = item
-            textCSV +=
+            textINSERT +=
                 `INSERT INTO Jobs (id_location, created, soc, id_timespan) VALUES ('${country}', '${created}', '${soc}', '${id_timespan}' );`
         })
 
         console.log('populatingJobs... Creating file...');
 
-        writeToFile(textCSV, '/output/jobsINSERT.txt', () => {
+        writeToFile(textINSERT, '/output/jobsINSERT.txt', () => {
             console.log('populatingJobs... DONE');
             resolve(jobs)
         })
@@ -37,8 +36,7 @@ const populateJobsLanguagesToFile = (jobs) => {
     return new Promise((resolve, reject) => {
 
         //Gets all jobs with hashes from file:
-        const fileContent = fs.readFileSync(__dirname + "/output/jobs.json");
-        const jobs = JSON.parse(fileContent)
+        const jobs = require(__dirname + "/output/jobsFINAL.json");
 
         console.log('populateJobsLanguages...');
 
@@ -50,19 +48,19 @@ const populateJobsLanguagesToFile = (jobs) => {
                 getJobIds()
                     .then(jobIds => {
 
-                        let textCSV = ''
+                        let textINSERT = ''
                         //...And save all job-languages relation:
                         jobs.forEach((item, index) => {
 
                             // item.keys.
-                            item.findings[0].keys.forEach(languageTag => {
+                            item.findings.forEach(languageTag => {
 
                                 const id_job = jobIds[index].id_job
                                 const id_language = languages.find(l => {
                                     return l.name == languageTag
                                 }).id_language
 
-                                textCSV +=
+                                textINSERT +=
                                     `INSERT INTO JobsLanguages (id_job, id_language) VALUES ('${id_job}','${id_language}');`
                             })
 
@@ -71,7 +69,7 @@ const populateJobsLanguagesToFile = (jobs) => {
 
                         console.log('populateJobsLanguages... Creating file...');
 
-                        writeToFile(textCSV, '/output/jobsLanguagesINSERT.txt', () => {
+                        writeToFile(textINSERT, '/output/jobsLanguagesINSERT.txt', () => {
                             console.log('populateJobsLanguages... DONE');
                             resolve()
                         })

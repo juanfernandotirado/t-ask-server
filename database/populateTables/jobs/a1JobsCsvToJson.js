@@ -6,8 +6,8 @@
  * Finally writes the final file.
  */
 
-//node -r dotenv/config database/populateTables/jobs/aONEJobsCsvToJson.js
-//node --require dotenv/config database/populateTables/jobs/aONEJobsCsvToJson.js
+//node -r dotenv/config database/populateTables/jobs/a1JobsCsvToJson.js
+//node --require dotenv/config database/populateTables/jobs/a1JobsCsvToJson.js
 
 ////////////////////////////////////////////////////////////
 
