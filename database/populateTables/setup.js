@@ -23,6 +23,7 @@ const clearTablesLanguages = () => {
 
         let sql =
             ` 
+        DELETE FROM Quotes;    
         DELETE FROM LanguagesTimeSpan;
         DELETE FROM Languages;
         DELETE FROM TimeSpan;
@@ -76,12 +77,12 @@ const clearTablesJobs = () => {
 //Each populate method sends many INSERTs to the database.
 
 // clearTablesLanguages()
-//     .then(populateLanguages)
-//     .then(populateTimeSpans)
-//     .then(populateLanguagesTimeSpan)
-//     .then(r => {
-//         console.log('all done!!!');
-//     })
+    // .then(populateLanguages)
+    // .then(populateTimeSpans)
+    // .then(populateLanguagesTimeSpan)
+    // .then(r => {
+    //     console.log('all done!!!');
+    // })
 
 //** ********************************** */
 //** JOBS */
@@ -92,8 +93,12 @@ const clearTablesJobs = () => {
 // 1. Clear tables:
 // clearTablesJobs()
 
-// 2. To extract Jobs into file: [WILL TAKE FOREVER]
-// node database/populateTables/jobs/START_FIRST_jobTagsExtractor.js 
+// 2. To extract Jobs into file:
+//[WILL TAKE FOREVER]
+// node -r dotenv/config database/populateTables/jobs/a1JobsCsvToJson.js
+// node -r dotenv/config database/populateTables/jobs/a2JobsXmlToFile.js
+// node -r dotenv/config database/populateTables/jobs/a3JobsToFinal.js
+//.....
 
 // 3. Add job categories to database (Automatic)
 // populateJobCategories()

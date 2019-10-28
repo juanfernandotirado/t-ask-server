@@ -56,12 +56,15 @@ const populateJobsLanguagesToFile = (jobs) => {
                             item.findings.forEach(languageTag => {
 
                                 const id_job = jobIds[index].id_job
-                                const id_language = languages.find(l => {
+                                let id_language = languages.find(l => {
                                     return l.name == languageTag
-                                }).id_language
+                                })
 
-                                textINSERT +=
-                                    `INSERT INTO JobsLanguages (id_job, id_language) VALUES ('${id_job}','${id_language}');`
+                                if (id_language) {
+                                    id_language = id_language.id_language
+                                    textINSERT +=
+                                        `INSERT INTO JobsLanguages (id_job, id_language) VALUES ('${id_job}','${id_language}');`
+                                }
                             })
 
                         })
