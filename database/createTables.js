@@ -41,6 +41,7 @@ CREATE TABLE Jobs (
         id_language int AUTO_INCREMENT,
         name varchar(255),
         description text,
+        logoUrl varchar(255),
         PRIMARY KEY (id_language)
         );
             
