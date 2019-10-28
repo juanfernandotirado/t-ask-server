@@ -366,7 +366,6 @@ const getAllJobsForEachLocation = () => {
     })
 }
 
-exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
 
 /**
  * Mapping the final response to follow the same pattern
@@ -412,3 +411,84 @@ const getFinalResponse = (finalArray) => {
     return finalArrayCountries
 
 }
+
+exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
+
+/////////////////////////////////////////////////////////
+
+const getQuotes = () =>{
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT Quotes.quote, Quotes.id_quote, Languages.id_language, Languages.name
+        FROM Quotes
+
+        INNER JOIN Languages
+        ON Quotes.id_Language = Languages.id_Language
+        
+        ;`
+        
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+            } else {
+
+                const getAllForQuotes = (languageObject, array) => {
+                    let fullArrayTimespans = array.filter(item => {
+                        return item.id_language == languageObject.id_language
+                    })
+
+                    let quotesArray = fullArrayTimespans.map(item => {
+
+
+                        //Deletes all fields from the language obj
+                        //that are inside the timespan obj.
+                        Object.keys(languageObject).forEach(key => {
+                            delete item[key]
+                        })
+
+
+                        return item
+                    })
+
+                    return {
+                        // language: languageObject.id_language,
+                        language: languageObject,
+                        quotesArray: quotesArray
+                    }
+                }
+
+                let idArrays = result.map(item => {
+                    return item.id_language
+                })
+
+                let idsArrayUniques = []
+
+                idArrays.forEach(item => {
+                    if (!idsArrayUniques.includes(item))
+                        idsArrayUniques.push(item)
+                })
+
+                let finalArray = idsArrayUniques.map(item => {
+
+                    const languageObjectFull = result.find(itemX => {
+                        return itemX.id_language == item
+                    })
+
+                    const languageObj = {
+                        id_language: languageObjectFull.id_language,
+                        name: languageObjectFull.name,
+                        description: languageObjectFull.description
+                    }
+
+                    return getAllForQuotes(languageObj, result)
+                })
+
+                resolve(finalArray)
+            }
+        })
+    })
+
+}
+
+exports.getQuotes = getQuotes;

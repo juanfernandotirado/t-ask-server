@@ -74,48 +74,35 @@ const combineLanguagesIdsAndQuotes = () => {
     })
 }
 
-const mysql = require('mysql');
+// combineLanguagesIdsAndQuotes()
+//     .then(newQuotesArray=>{
 
-// const cp = mysql.createPool({
+//         newQuotesArray.forEach(item => {
+//             const quote = item.quote
+//             const id_language = item.id_language
 
-// connectionLimit:1000,
-// host : 'juantirado.wmdd.ca',
-// user : 'JuanQuotes',
-// password : 'Nazly9823*',
-// database : 'Quotes-test', // this has to be the name of the database you just created.
-// multipleStatements: true
+//             let combinedSql = ''
 
-// });
+//             combinedSql+= `INSERT INTO Quotes (quote, id_language) VALUES ('${quote}', ${id_language});`
 
-
-
-combineLanguagesIdsAndQuotes()
-    .then(newQuotesArray=>{
-
-        newQuotesArray.forEach(item => {
-            const quote = item.quote
-            const id_language = item.id_language
-
-            let combinedSql = ''
-
-            combinedSql+= `INSERT INTO Quotes (quote, id_language) VALUES ('${quote}', ${id_language});`
-
-            connectionPool.query(combinedSql, (error, result) => {
-                if (error) {
-                    console.log(error);
+//             connectionPool.query(combinedSql, (error, result) => {
+//                 if (error) {
+//                     console.log(error);
                 
-                } else {
-                    console.log('populateQuotes DONE');
-                }
-            })
+//                 } else {
+//                     console.log('populateQuotes DONE');
+//                 }
+//             })
             
-        })
+//         })
 
-    })
+//     })
+
+const { getQuotes } = require('../database/databaseUtils.js')
 
 router.get('/', (req, res) => {
 
-    combineLanguagesIdsAndQuotes()
+    getQuotes()
         .then(result => {
             res.send(result)
 
