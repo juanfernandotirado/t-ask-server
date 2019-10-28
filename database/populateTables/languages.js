@@ -34,7 +34,7 @@ const getLanguagesObj = () => {
         { name: `C++`, tags: [`C++`] },
         { name: `R`, tags: getVariations('R'), case: true },
         { name: `Objective-C`, tags: [`Objective-C`] },
-        { name: `Swift`, tags: getVariations('Swift')},
+        { name: `Swift`, tags: getVariations('Swift') },
         { name: `Matlab`, tags: [`Matlab`] },
         { name: `TypeScript`, tags: [`TypeScript`] },
         { name: `Kotlin`, tags: [`Kotlin`] },
@@ -63,7 +63,6 @@ const getVariations = (item) => {
     ]
 }
 
-module.exports.getLanguagesObj = getLanguagesObj
 
 //////////////////////////////////////////////////////////////////
 

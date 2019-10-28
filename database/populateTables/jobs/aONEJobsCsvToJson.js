@@ -11,7 +11,7 @@
 
 ////////////////////////////////////////////////////////////
 
-const FILE_JOB_CSV = __dirname + '/input/filtered_jobs_short.csv'
+const FILE_JOB_CSV = __dirname + '/input/raw_job_archive_2019-09-30_1.csv'
 const FILE_JOB_JSON = __dirname + '/output/jobs.json'
 
 ////////////////////////////////////////////////////////////
