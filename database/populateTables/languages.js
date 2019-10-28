@@ -17,9 +17,9 @@ let array =
         [`TypeScript`, `Development language known as a typed superset of Javascript which compiles the code into clean and simple JS code.`, `/assets/language-icon/typescript.svg`],
         [`Kotlin`, `Programming language used in mobile development of Android. It improves code readability, speeds up development, and compiles Java code.`, `/assets/language-icon/kotlin.svg`],
         [`Ruby`, `Development language mainly used for web applications as a framework. It can be also found in the Test Automation indusrty, Server Programming, and bio-medicine.`, `/assets/language-icon/ruby.svg`],
-        [`visual-basic`, `Development language created by Microsoft. It's current edition (Visual Basic .NET) is used for Microsoft platforms and desktop programs.`, `/assets/language-icon/visual-basic.svg`],
+        [`visual-basic`, "Development language created by Microsoft. Its current edition (Visual Basic .NET) is used for Microsoft platforms and desktop programs.", `/assets/language-icon/visual-basic.svg`],
         [`Go`, `Programming language created at Google mainly used to build network servers, web services and clients connecting to multiple servers.`, `/assets/language-icon/go.svg`],
-        [`Rust`, `Programming language used to build web's software, embedded computers, distributed services and for command-line code.`, `/assets/language-icon/rust.svg`]
+        [`Rust`, "Programming language used to build webs software, embedded computers, distributed services and for command-line code.", `/assets/language-icon/rust.svg`]
     ]
 
     let descriptionsArray = [

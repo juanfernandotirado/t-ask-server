@@ -74,29 +74,29 @@ const combineLanguagesIdsAndQuotes = () => {
     })
 }
 
-// combineLanguagesIdsAndQuotes()
-//     .then(newQuotesArray=>{
+combineLanguagesIdsAndQuotes()
+    .then(newQuotesArray=>{
 
-//         newQuotesArray.forEach(item => {
-//             const quote = item.quote
-//             const id_language = item.id_language
+        newQuotesArray.forEach(item => {
+            const quote = item.quote
+            const id_language = item.id_language
 
-//             let combinedSql = ''
+            let combinedSql = ''
 
-//             combinedSql+= `INSERT INTO Quotes (quote, id_language) VALUES ('${quote}', ${id_language});`
+            combinedSql+= `INSERT INTO Quotes (quote, id_language) VALUES ('${quote}', ${id_language});`
 
-//             connectionPool.query(combinedSql, (error, result) => {
-//                 if (error) {
-//                     console.log(error);
+            connectionPool.query(combinedSql, (error, result) => {
+                if (error) {
+                    console.log(error);
                 
-//                 } else {
-//                     console.log('populateQuotes DONE');
-//                 }
-//             })
+                } else {
+                    console.log('populateQuotes DONE');
+                }
+            })
             
-//         })
+        })
 
-//     })
+    })
 
 const { getQuotes } = require('../database/databaseUtils.js')
 

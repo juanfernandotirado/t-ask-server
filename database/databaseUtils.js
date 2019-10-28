@@ -76,7 +76,7 @@ const getLanguagesLatestCount = () => {
 
         const SQL_LATEST_TIMESPAN_ID = `SELECT id_timespan FROM TimeSpan WHERE start = (SELECT MAX(start) FROM TimeSpan)`
 
-        let sql = `SELECT Languages.id_language, Languages.name, Languages.description, LanguagesTimeSpan.total
+        let sql = `SELECT Languages.id_language, Languages.name, Languages.logoUrl, Languages.description, LanguagesTimeSpan.total
             FROM Languages
             INNER JOIN LanguagesTimeSpan
             ON Languages.id_language = LanguagesTimeSpan.id_language
