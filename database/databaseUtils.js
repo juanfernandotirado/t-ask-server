@@ -213,20 +213,63 @@ const getJobCategories = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT Jobs.soc, JobCategories.name, COUNT(*) AS 'totalJobs'
+        let sql = `SELECT Jobs.soc, JobCategories.name, Jobs.id_location, count(case when Jobs.id_location = 1 then 1 else null end) as US, count(case when Jobs.id_location = 2 then 1 else null end) as CA
         FROM Jobs
+
         INNER JOIN JobCategories
         ON JobCategories.soc = Jobs.soc
+
         WHERE Jobs.created > (SELECT MAX(start) FROM TimeSpan)
-        GROUP BY JobCategories.soc
-        ORDER BY totalJobs DESC
+
+        GROUP BY Jobs.id_location,JobCategories.soc
+
         ;`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject(error)
             } else {
-                resolve(result)
+                const getFinalResponse = (result) => {
+
+                    let finalArrayCountries = []
+
+                    let objUS = {
+                        country: "US",
+                        data: []
+                    }
+
+                    let objCA = {
+                        country: "CA",
+                        data: []
+                    }
+                    //...
+                    result.forEach(item => {
+                        
+                        if (item.id_location == 1) {
+                            objUS.data.push({
+                                soc: item.soc,
+                                name: item.name,
+                                totalJobs: item['US'],
+                            })
+                        }
+
+                        if (item.id_location == 2) {
+                            objCA.data.push({
+                                soc: item.soc,
+                                name: item.name,
+                                totalJobs: item['CA'],
+                            })
+                        }
+
+                    })
+
+                    finalArrayCountries.push(objUS)
+                    finalArrayCountries.push(objCA)
+
+                    return finalArrayCountries
+
+                }
+                resolve(getFinalResponse(result))
             }
         })
     })
