@@ -11,7 +11,7 @@ const { populateJobCategories } = require('./jobCategories.js');
 
 const { populateJobsToFile, populateJobsLanguagesToFile } = require('./jobs/START_LAST_jobToFile.js');
 
-const { populateLanguages } = require('./languages.js');
+const { populateLanguages, populateLanguagesDescriptions } = require('./languages.js');
 const { populateTimeSpans } = require('./timeSpan.js');
 const { populateLanguagesTimeSpan } = require('./languagesTimeSpan.js');
 
@@ -77,7 +77,8 @@ const clearTablesJobs = () => {
 //Each populate method sends many INSERTs to the database.
 
 // clearTablesLanguages()
-    // .then(populateLanguages)
+// .then(populateLanguages)
+populateLanguagesDescriptions()
     // .then(populateTimeSpans)
     // .then(populateLanguagesTimeSpan)
     // .then(r => {

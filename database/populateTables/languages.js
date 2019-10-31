@@ -22,24 +22,24 @@ let array =
         [`Rust`, "Programming language used to build webs software, embedded computers, distributed services and for command-line code.", `/assets/language-icon/rust.svg`]
     ]
 
-    let descriptionsArray = [
-        `General purpose programming language used in several industries. From videogame development to robotics and artificial inteligence.`,
-        `Development language used for web applications, desktop applications, and mobile applications for the Android ecosystem.`,
-        `Development language used for front-end web development.`,
-        `C based language used for the creation of .NET applications; such as Windows services, games, console applications, etc.`,
-        `Popular language used for server-side scripting, command line scripting, and writing desktop applications. Also used on WordPress for the coding of themes.`,
-        `C based language used for the developing game engines, and desktop apps.`,
-        `Programming language used in the statics industry for the creationg of graphs and programs.`,
-        `Programming language created by Apple as the foundation of OSX and IOS. Currently Apple is transitioning to Swift as their core language.`,
-        `Development language created by Apple for apple products and mobile applications.`,
-        `Development language used in technical computing for testing mathematical operations displayed in a matrix.`,
-        `Development language known as a typed superset of Javascript which compiles the code into clean and simple JS code.`,
-        `Programming language used in mobile development of Android. It improves code readability, speeds up development, and compiles Java code.`,
-        `Development language mainly used for web applications as a framework. It can be also found in the Test Automation indusrty, Server Programming, and bio-medicine.`,
-        `Development language created by Microsoft. It's current edition (Visual Basic .NET) is used for Microsoft platforms and desktop programs.`,
-        `Programming language created at Google mainly used to build network servers, web services and clients connecting to multiple servers.`,
-        `Programming language used to build web's software, embedded computers, distributed services and for command-line code.`
-    ]
+let descriptionsArray = [
+    `General purpose programming language used in several industries. From videogame development to robotics and artificial inteligence.`,
+    `Development language used for web applications, desktop applications, and mobile applications for the Android ecosystem.`,
+    `Development language used for front-end web development.`,
+    `C based language used for the creation of .NET applications; such as Windows services, games, console applications, etc.`,
+    `Popular language used for server-side scripting, command line scripting, and writing desktop applications. Also used on WordPress for the coding of themes.`,
+    `C based language used for the developing game engines, and desktop apps.`,
+    `Programming language used in the statics industry for the creationg of graphs and programs.`,
+    `Programming language created by Apple as the foundation of OSX and IOS. Currently Apple is transitioning to Swift as their core language.`,
+    `Development language created by Apple for apple products and mobile applications.`,
+    `Development language used in technical computing for testing mathematical operations displayed in a matrix.`,
+    `Development language known as a typed superset of Javascript which compiles the code into clean and simple JS code.`,
+    `Programming language used in mobile development of Android. It improves code readability, speeds up development, and compiles Java code.`,
+    `Development language mainly used for web applications as a framework. It can be also found in the Test Automation indusrty, Server Programming, and bio-medicine.`,
+    `Development language created by Microsoft. It's current edition (Visual Basic .NET) is used for Microsoft platforms and desktop programs.`,
+    `Programming language created at Google mainly used to build network servers, web services and clients connecting to multiple servers.`,
+    `Programming language used to build web's software, embedded computers, distributed services and for command-line code.`
+]
 
 const getLanguagesObj = () => {
 
@@ -111,5 +111,37 @@ const populateLanguages = () => {
 
 
 exports.populateLanguages = populateLanguages
+
+
+const populateLanguagesDescriptions = () => {
+    return new Promise((resolve, reject) => {
+
+        let concatenatedSQL = ''
+
+        array.forEach(item => {
+            const name = item[0]
+            const description = item[1]
+            const logoUrl = item[2]
+
+            concatenatedSQL += `UPDATE Languages
+            SET description = '${description}', logoUrl ='${logoUrl}'
+            WHERE name = '${name}';`
+        })
+
+        connectionPool.query(concatenatedSQL, (error, result) => {
+            if (error) {
+                reject(error)
+            } else {
+
+                console.log('populateLanguagesDescriptions DONE');
+                resolve()
+            }
+        })
+
+    })  //End promise
+}
+
+
+exports.populateLanguagesDescriptions = populateLanguagesDescriptions
 
 ////////////////////////////////////////////////////////////////
