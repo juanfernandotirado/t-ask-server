@@ -168,7 +168,8 @@ const getAllTimeSpanByLanguage = () => {
                     const languageObj = {
                         id_language: languageObjectFull.id_language,
                         name: languageObjectFull.name,
-                        description: languageObjectFull.description
+                        description: languageObjectFull.description,
+                        logoUrl: languageObjectFull.logoUrl
                     }
 
                     return getAllForLanguage(languageObj, result)
