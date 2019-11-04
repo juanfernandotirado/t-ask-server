@@ -38,11 +38,10 @@ app.use('/api', routerIndex)
  */
 app.get('/publicKey', (req, res) => {
 
-    const { getPubKey } = require('./openPGP.js');
+    const { getPubKey, encrypt, decrypt } = require('./openPGP.js');
 
     getPubKey()
         .then(key => {
-            console.log(key);
 
             if (key) {
                 res.send(key)
