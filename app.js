@@ -38,13 +38,19 @@ app.use('/api', routerIndex)
  */
 app.get('/publicKey', (req, res) => {
 
-    const fs = require('fs');
-    fs.readFile('./pubKey.PGP', 'utf8', function (err, data) {
-        if (err) throw err;    
-        
-        res.send(data)
-    });
-    
+    const { getPubKey } = require('./openPGP.js');
+
+    getPubKey()
+        .then(key => {
+            console.log(key);
+
+            if (key) {
+                res.send(key)
+            } else {
+                res.statusCode = 404
+                res.send('Not found.')
+            }
+        })
 })
 
 
