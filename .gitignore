@@ -1,6 +1,9 @@
 node_modules
 .env
 
+privKey.PGP
+pubKey.PGP
+revogCert.PGP
 
 database/populateTables/jobs/input
 database/populateTables/jobs/output
