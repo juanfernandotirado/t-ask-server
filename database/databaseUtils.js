@@ -1,5 +1,7 @@
 const { connectionPool } = require('./connection.js');
 
+const mysql = require('mysql')
+
 const getJobIds = () => {
 
     return new Promise((resolve, reject) => {
@@ -245,7 +247,7 @@ const getJobCategories = () => {
                     }
                     //...
                     result.forEach(item => {
-                        
+
                         if (item.id_location == 1) {
                             objUS.data.push({
                                 soc: item.soc,
@@ -460,7 +462,7 @@ exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
 
 /////////////////////////////////////////////////////////
 
-const getQuotes = () =>{
+const getQuotes = () => {
 
     return new Promise((resolve, reject) => {
 
@@ -471,7 +473,7 @@ const getQuotes = () =>{
         ON Quotes.id_Language = Languages.id_Language
         
         ;`
-        
+
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject(error)
@@ -536,3 +538,231 @@ const getQuotes = () =>{
 }
 
 exports.getQuotes = getQuotes;
+
+/////////////////////////////////////////////////////////////////////////////
+
+const createUserDatabase = (newUserName, newUserEmail, newUserPassword, userLanguagesArray) => {
+
+    const checkEmail = () => {
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT email 
+            FROM Users
+            WHERE email = '${newUserEmail}'
+            ;`
+
+            connectionPool.query(sql, (error, result) => {
+                if (error) {
+
+                    reject(error)
+
+                } else {
+
+                    // console.log(result);
+
+                    if (result.length > 0) {
+                        reject('Email is in use.')
+                    } else {
+                        resolve()
+                    }
+                }
+            })
+        })//end promise
+    }
+
+    const insertNewUser = () => {
+
+        return new Promise((resolve, reject) => {
+
+            let sql = `INSERT INTO Users (name, email, password) 
+            VALUES (${mysql.escape(newUserName)}, ${mysql.escape(newUserEmail)}, MD5(${mysql.escape(newUserPassword)}))
+            ;`
+
+            connectionPool.query(sql, (error, result) => {
+                if (error) {
+
+                    reject(error)
+
+                } else {
+
+                    resolve()
+                }
+
+            })
+
+        })
+
+    }
+
+    let languagesArray = []
+    let CreatedUserId
+
+    const getAllLanguages = () => {
+
+        return new Promise((resolve, reject) => {
+
+            let sql = `SELECT * 
+            FROM Languages
+            ;`
+
+            connectionPool.query(sql, (error, result) => {
+                if (error) {
+
+                    reject(error)
+
+                } else {
+
+                    languagesArray = result
+                    // console.log('Languages Selected!!!');
+
+                    resolve(result)                    
+
+                }
+
+            })
+
+        })
+
+    }
+
+    const getCreatedUserId = () => {
+
+        return new Promise((resolve, reject) => {
+
+            let sql = `SELECT id_user 
+            FROM Users
+            WHERE email = ${mysql.escape(newUserEmail)}
+            ;`
+
+            connectionPool.query(sql, (error, result) => {
+                if (error) {
+                    reject(error)
+
+                } else {
+
+                    CreatedUserId = result
+
+                    // console.log('CURRENT USER: ' + CreatedUserId[0].id_user);
+
+                    resolve()
+                }
+
+            })
+
+        })
+
+    }
+
+    const insertLanguagesUsersItems = () => {
+
+        return new Promise((resolve, reject) => {
+
+
+            if (!userLanguagesArray) {
+
+                reject('Select at least 3 languages')
+                return;
+            }
+            //------------------------
+            // Returning HERE
+            //------------------------
+
+
+
+            let combinedSql = ''
+
+            userLanguagesArray.forEach(item => {
+                console.log('FAVORITE LANGUAGES: ' + item);
+
+                for (let i = 0; i < languagesArray.length; i++) {
+
+                    if (item == languagesArray[i].name) {
+
+                        combinedSql += `INSERT INTO LanguagesUsers (id_language, id_user) 
+                        VALUES (${mysql.escape(languagesArray[i].id_language)}, ${CreatedUserId[0].id_user})
+                        ;`
+
+                        // console.log('Favorite Language:' + item + ' ----> Language Id: ' + languagesArray[i].id_language);
+
+                    } else {
+                        // console.log('NOT FOUND --> Favorite Language: ' + item + ' ----> Language Object: ' + languagesArray[i].name);
+                    }
+                }
+            })
+
+
+            connectionPool.query(combinedSql, (error, result) => {
+                if (error) {
+                    reject(error)
+                } else {
+                    // console.log('LanguagesUsers Item Inserted!');                    
+                    resolve()
+                }
+
+            })
+
+        })
+    }
+
+    return checkEmail()
+        .then(insertNewUser)
+        .then(getAllLanguages)
+        .then(getCreatedUserId)
+        .then(insertLanguagesUsersItems)
+        .then(r => {
+            return loginUserDatabase(newUserEmail, newUserPassword)
+        })
+
+}
+
+exports.createUserDatabase = createUserDatabase;
+
+// //////////////////////////////////////////////////////////////////////
+
+const loginUserDatabase = (userEmail, userPassword) => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT *
+
+        FROM Users
+
+        INNER JOIN LanguagesUsers
+
+        ON Users.id_user = LanguagesUsers.id_user
+
+        WHERE email = ${mysql.escape(userEmail)} AND password = MD5(${mysql.escape(userPassword)})
+
+        ;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+
+            } else if (result.length < 1) {
+                reject('Email or Password Incorrect!')
+            } else {
+
+                let favoriteLanguages = []
+
+                result.map(item => {
+                    favoriteLanguages.push(item.id_language)
+                })
+
+                const currentUser = {
+                    "id_user": result[0].id_user,
+                    "name": result[0].name,
+                    "email": result[0].email,
+                    "favoriteLanguages": favoriteLanguages
+                }
+
+
+                resolve(currentUser)
+            }
+
+        })
+
+    })  //End promise
+
+}
+
+exports.loginUserDatabase = loginUserDatabase;
