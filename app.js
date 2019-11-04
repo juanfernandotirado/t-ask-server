@@ -52,6 +52,30 @@ app.get('/publicKey', (req, res) => {
         })
 })
 
+let jwt = require('jsonwebtoken');
+
+app.get('/token', (req, res) => {
+
+    /**
+     * iat = issued at == Numeric Date
+     * exp = expires at
+     * nbf = NotBeforeError (Thrown if current time is before the nbf claim.)
+     */
+
+    let original = { foo: 'bar' }
+
+    let token = jwt.sign(original, process.env.JWT_SECRET);
+
+    let result = {
+        token: token,
+        original: original,
+        decrypted: jwt.verify(token, process.env.JWT_SECRET)
+    }
+
+    res.send(result)
+
+})
+
 
 //*** API START ***
 
