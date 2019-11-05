@@ -84,11 +84,6 @@ const encrypt = async (object) => {
 
     const PUBLIC_KEY = await getPubKey();
 
-    console.log(PUBLIC_KEY);
-
-    console.log('here!');
-
-
     let pubkeys = [PUBLIC_KEY]
 
     let publicKeysPromises = pubkeys.map(async (key) => {
@@ -112,9 +107,6 @@ const encrypt = async (object) => {
 const decrypt = async (text) => {
 
     const PRIVATE_KEY = await getPrivKey();
-
-    console.log(PRIVATE_KEY);
-
 
     //First gets private key and decrypts it with the password:
     const privKeyObj = (await openpgp.key.readArmored(PRIVATE_KEY)).keys[0]
