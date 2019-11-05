@@ -569,32 +569,7 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
         })//end promise
     }
 
-    const insertNewUser = () => {
-
-        return new Promise((resolve, reject) => {
-
-            let sql = `INSERT INTO Users (name, email, password) 
-            VALUES (${mysql.escape(newUserName)}, ${mysql.escape(newUserEmail)}, MD5(${mysql.escape(newUserPassword)}))
-            ;`
-
-            connectionPool.query(sql, (error, result) => {
-                if (error) {
-
-                    reject(error)
-
-                } else {
-
-                    resolve()
-                }
-
-            })
-
-        })
-
-    }
-
     let languagesArray = []
-    let CreatedUserId
 
     const getAllLanguages = () => {
 
@@ -623,6 +598,105 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
         })
 
     }
+
+    const checkUserLanguages = () => {
+        return new Promise((resolve, reject) => {
+            if (!languagesIdArray || languagesIdArray.length == 0 || languagesIdArray.length > 3) {
+                reject('Please Select 3 Languages')
+            } else {
+
+                let databaseLanguagesIds = languagesArray.map(item =>{
+                    return item.id_language
+                })
+
+                const matchedIdsCount = 0
+
+
+                console.log('User languages: ' + languagesIdArray);
+
+                languagesIdArray.forEach(item=> {
+
+                    console.log(languagesIdArray.length + '<---');
+                    
+
+                    databaseLanguagesIds.forEach(id =>{
+
+                        console.log(databaseLanguagesIds.length);
+                        if (item == id) {
+
+                            matchedIdsCount++
+
+                            console.log('Item Checked: '+ item + ' ---> ' + id)   
+
+                        }else {
+
+                            console.log('NOT FOUND ---> Item Checked: '+ item + ' ---> ' + id)
+
+                        }
+
+                    })
+
+                    // for (let i = 0; i < databaseLanguagesIds.length; i++) {
+
+                    //     if (item == databaseLanguagesIds[i]) {
+
+                    //         matchedIdsCount++
+
+                    //         console.log('Item Checked: '+ item + ' ---> ' + databaseLanguagesIds[i])   
+
+                    //     }else {
+
+                    //         console.log('NOT FOUND ---> Item Checked: '+ item + ' ---> ' + databaseLanguagesIds[i])
+
+                    //     }
+                    //     console.log('Database languages: ' + databaseLanguagesIds.length);
+                        
+                    // }
+                   
+
+                })
+                
+                console.log('Database languages: ' + databaseLanguagesIds);
+                console.log('Number of Matches = ' + matchedIdsCount);
+                
+                    if (matchedIdsCount < languagesIdArray.length) {
+                        reject('Languages selected don\'t exist.') 
+                    } else {
+                        console.log('LANGUAGES CHECK PASSED!!!');
+                        
+                        resolve('LANGUAGES CHECK PASSED!!!')
+                    }
+                
+            }
+        })//end promise
+    }
+
+    const insertNewUser = () => {
+
+        return new Promise((resolve, reject) => {
+
+            let sql = `INSERT INTO Users (name, email, password) 
+            VALUES (${mysql.escape(newUserName)}, ${mysql.escape(newUserEmail)}, MD5(${mysql.escape(newUserPassword)}))
+            ;`
+
+            connectionPool.query(sql, (error, result) => {
+                if (error) {
+
+                    reject(error)
+
+                } else {
+
+                    resolve()
+                }
+
+            })
+
+        })
+
+    }
+
+    
+    let CreatedUserId
 
     const getCreatedUserId = () => {
 
@@ -704,8 +778,9 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
     }
 
     return checkEmail()
-        .then(insertNewUser)
         .then(getAllLanguages)
+        .then(checkUserLanguages)
+        .then(insertNewUser)
         .then(getCreatedUserId)
         .then(insertLanguagesUsersItems)
         .then(r => {
