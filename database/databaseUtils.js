@@ -541,7 +541,7 @@ exports.getQuotes = getQuotes;
 
 /////////////////////////////////////////////////////////////////////////////
 
-const createUserDatabase = (newUserName, newUserEmail, newUserPassword, userLanguagesArray) => {
+const createUserDatabase = (newUserName, newUserEmail, newUserPassword, languagesIdArray) => {
 
     const checkEmail = () => {
         return new Promise((resolve, reject) => {
@@ -614,7 +614,7 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, userLang
                     languagesArray = result
                     // console.log('Languages Selected!!!');
 
-                    resolve(result)                    
+                    resolve(result)
 
                 }
 
@@ -657,7 +657,7 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, userLang
         return new Promise((resolve, reject) => {
 
 
-            if (!userLanguagesArray) {
+            if (!languagesIdArray) {
 
                 reject('Select at least 3 languages')
                 return;
@@ -670,12 +670,12 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, userLang
 
             let combinedSql = ''
 
-            userLanguagesArray.forEach(item => {
+            languagesIdArray.forEach(item => {
                 console.log('FAVORITE LANGUAGES: ' + item);
 
                 for (let i = 0; i < languagesArray.length; i++) {
 
-                    if (item == languagesArray[i].name) {
+                    if (item == languagesArray[i].id_language) {
 
                         combinedSql += `INSERT INTO LanguagesUsers (id_language, id_user) 
                         VALUES (${mysql.escape(languagesArray[i].id_language)}, ${CreatedUserId[0].id_user})
@@ -692,7 +692,7 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, userLang
 
             connectionPool.query(combinedSql, (error, result) => {
                 if (error) {
-                    reject(error)
+                    reject(JSON.stringify(error) + ' insertLanguagesUsersItems')
                 } else {
                     // console.log('LanguagesUsers Item Inserted!');                    
                     resolve()
