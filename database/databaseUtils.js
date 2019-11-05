@@ -602,6 +602,8 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
     const checkUserLanguages = () => {
         return new Promise((resolve, reject) => {
             if (!languagesIdArray || languagesIdArray.length == 0 || languagesIdArray.length > 3) {
+                //console.log(languagesIdArray);
+                
                 reject('Please Select 3 Languages')
             } else {
 
@@ -609,55 +611,40 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
                     return item.id_language
                 })
 
-                const matchedIdsCount = 0
+                let matchedIdsCount = 0
 
 
-                console.log('User languages: ' + languagesIdArray);
+                //console.log('User languages: ' + languagesIdArray);
+                //console.log('Database languages: ' + databaseLanguagesIds);
 
                 languagesIdArray.forEach(item=> {
 
-                    console.log(languagesIdArray.length + '<---');
+                    //console.log(languagesIdArray.length + '<---');
                     
 
                     databaseLanguagesIds.forEach(id =>{
 
-                        console.log(databaseLanguagesIds.length);
+                        //console.log(`${item} == ${id}`);
                         if (item == id) {
 
                             matchedIdsCount++
 
-                            console.log('Item Checked: '+ item + ' ---> ' + id)   
+                            //console.log('Item Checked: '+ item + ' ---> ' + id)   
 
                         }else {
 
-                            console.log('NOT FOUND ---> Item Checked: '+ item + ' ---> ' + id)
+                            //console.log('NOT FOUND ---> Item Checked: '+ item + ' ---> ' + id)
 
                         }
 
                     })
 
-                    // for (let i = 0; i < databaseLanguagesIds.length; i++) {
-
-                    //     if (item == databaseLanguagesIds[i]) {
-
-                    //         matchedIdsCount++
-
-                    //         console.log('Item Checked: '+ item + ' ---> ' + databaseLanguagesIds[i])   
-
-                    //     }else {
-
-                    //         console.log('NOT FOUND ---> Item Checked: '+ item + ' ---> ' + databaseLanguagesIds[i])
-
-                    //     }
-                    //     console.log('Database languages: ' + databaseLanguagesIds.length);
-                        
-                    // }
                    
 
                 })
                 
-                console.log('Database languages: ' + databaseLanguagesIds);
-                console.log('Number of Matches = ' + matchedIdsCount);
+                //console.log('Database languages: ' + databaseLanguagesIds);
+                //console.log('Number of Matches = ' + matchedIdsCount);
                 
                     if (matchedIdsCount < languagesIdArray.length) {
                         reject('Languages selected don\'t exist.') 
@@ -745,7 +732,7 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
             let combinedSql = ''
 
             languagesIdArray.forEach(item => {
-                console.log('FAVORITE LANGUAGES: ' + item);
+                //console.log('FAVORITE LANGUAGES: ' + item);
 
                 for (let i = 0; i < languagesArray.length; i++) {
 
