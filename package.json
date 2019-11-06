@@ -29,7 +29,9 @@
     "node-xlsx": "^0.15.0",
     "nodemailer": "^6.3.1",
     "openpgp": "^4.6.2",
-    "xml-stream": "^0.4.5"
+    "xml-stream": "^0.4.5",
+    "cheerio": "^1.0.0-rc.3",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "csv-parser": "^2.3.1",
