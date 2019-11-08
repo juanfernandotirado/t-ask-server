@@ -6,13 +6,13 @@ const { connectionPool } = require('./connection.js');
 const createTables = `
 
 CREATE TABLE JobCategories (
-    soc int NOT NULL,
+    soc int NOT NULL AUTO_INCREMENT,
     name varchar(255),
     PRIMARY KEY (soc)
     );
 
 CREATE TABLE Jobs (
-    id_job int AUTO_INCREMENT,
+    id_job int NOT NULL AUTO_INCREMENT,
     id_location int,
     created datetime,
     soc int,
@@ -23,14 +23,14 @@ CREATE TABLE Jobs (
     );
   
     CREATE TABLE TimeSpan (
-        id_timespan int AUTO_INCREMENT,
+        id_timespan int NOT NULL AUTO_INCREMENT,
         start datetime,
         end datetime,
         PRIMARY KEY (id_timespan)
         );
             
         CREATE TABLE Users (
-        id_user int AUTO_INCREMENT,
+        id_user int NOT NULL AUTO_INCREMENT,
         name varchar(255),
         password varchar(255),
         email varchar(255),
@@ -38,7 +38,7 @@ CREATE TABLE Jobs (
         );
             
         CREATE TABLE Languages (
-        id_language int AUTO_INCREMENT,
+        id_language int NOT NULL AUTO_INCREMENT,
         name varchar(255),
         description text,
         logoUrl varchar(255),
@@ -46,7 +46,7 @@ CREATE TABLE Jobs (
         );
             
         CREATE TABLE Location (
-        id_location int AUTO_INCREMENT,
+        id_location int NOT NULL AUTO_INCREMENT,
         name varchar(255),
         PRIMARY KEY (id_location)
         );
@@ -67,14 +67,14 @@ CREATE TABLE Jobs (
         );
             
         CREATE TABLE FavoriteEvevents (
-        id_event int AUTO_INCREMENT,
+        id_event int NOT NULL AUTO_INCREMENT,
         id_user int,
         PRIMARY KEY (id_event),
         FOREIGN KEY (id_user) REFERENCES Users(id_user)
         );
             
         CREATE TABLE FavoriteArticles (
-        id_article int AUTO_INCREMENT,
+        id_article int NOT NULL AUTO_INCREMENTT,
         id_user int,
         PRIMARY KEY (id_article),
         FOREIGN KEY (id_user) REFERENCES Users(id_user)
@@ -82,7 +82,7 @@ CREATE TABLE Jobs (
             
             
         CREATE TABLE Quotes (
-        id_quote int AUTO_INCREMENT,
+        id_quote int NOT NULL AUTO_INCREMENT,
         quote text,
         id_language int,
         PRIMARY KEY (id_quote),
@@ -105,6 +105,15 @@ CREATE TABLE Jobs (
         PRIMARY KEY (id_language, id_timespan),
         FOREIGN KEY (id_language) REFERENCES Languages(id_language),
         FOREIGN KEY (id_timespan) REFERENCES TimeSpan(id_timespan)
+        );
+
+        CREATE TABLE login (
+            id_login int NOT NULL AUTO_INCREMENT,
+            id_user int,
+            created timestamp DEFAULT CURRENT_TIMESTAMP,
+            token text,
+            PRIMARY KEY (id_login),
+            FOREIGN KEY (id_user) REFERENCES Users(id_user)
         );
 `
 
