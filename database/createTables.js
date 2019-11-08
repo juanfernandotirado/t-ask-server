@@ -62,6 +62,7 @@ CREATE TABLE Jobs (
         CREATE TABLE LanguagesUsers (
         id_language int,
         id_user int,
+        PRIMARY KEY (id_language, id_user),
         FOREIGN KEY (id_language) REFERENCES Languages(id_language),
         FOREIGN KEY (id_user) REFERENCES Users(id_user)
         );
