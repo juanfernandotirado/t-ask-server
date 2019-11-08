@@ -1,5 +1,3 @@
-const { connectionPool } = require('../database/connection.js');
-
 const { createUserDatabase, loginUserDatabase } = require('../database/databaseUtils.js')
 
 
