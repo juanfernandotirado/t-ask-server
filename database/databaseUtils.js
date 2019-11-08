@@ -603,11 +603,11 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
         return new Promise((resolve, reject) => {
             if (!languagesIdArray || languagesIdArray.length == 0 || languagesIdArray.length > 3) {
                 //console.log(languagesIdArray);
-                
+
                 reject('Please Select 3 Languages')
             } else {
 
-                let databaseLanguagesIds = languagesArray.map(item =>{
+                let databaseLanguagesIds = languagesArray.map(item => {
                     return item.id_language
                 })
 
@@ -617,12 +617,12 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
                 //console.log('User languages: ' + languagesIdArray);
                 //console.log('Database languages: ' + databaseLanguagesIds);
 
-                languagesIdArray.forEach(item=> {
+                languagesIdArray.forEach(item => {
 
                     //console.log(languagesIdArray.length + '<---');
-                    
 
-                    databaseLanguagesIds.forEach(id =>{
+
+                    databaseLanguagesIds.forEach(id => {
 
                         //console.log(`${item} == ${id}`);
                         if (item == id) {
@@ -631,7 +631,7 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
 
                             //console.log('Item Checked: '+ item + ' ---> ' + id)   
 
-                        }else {
+                        } else {
 
                             //console.log('NOT FOUND ---> Item Checked: '+ item + ' ---> ' + id)
 
@@ -639,21 +639,21 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
 
                     })
 
-                   
+
 
                 })
-                
+
                 //console.log('Database languages: ' + databaseLanguagesIds);
                 //console.log('Number of Matches = ' + matchedIdsCount);
-                
-                    if (matchedIdsCount < languagesIdArray.length) {
-                        reject('Languages selected don\'t exist.') 
-                    } else {
-                        console.log('LANGUAGES CHECK PASSED!!!');
-                        
-                        resolve('LANGUAGES CHECK PASSED!!!')
-                    }
-                
+
+                if (matchedIdsCount < languagesIdArray.length) {
+                    reject('Languages selected don\'t exist.')
+                } else {
+                    console.log('LANGUAGES CHECK PASSED!!!');
+
+                    resolve('LANGUAGES CHECK PASSED!!!')
+                }
+
             }
         })//end promise
     }
@@ -682,7 +682,7 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
 
     }
 
-    
+
     let CreatedUserId
 
     const getCreatedUserId = () => {
@@ -778,7 +778,56 @@ const createUserDatabase = (newUserName, newUserEmail, newUserPassword, language
 
 exports.createUserDatabase = createUserDatabase;
 
-// //////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+const checkTokenDatabase = (token) => {
+    return new Promise((resolve, reject) => {
+
+        const sql = `SELECT * FROM login WHERE token = ${mysql.escape(token)};`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(JSON.stringify(error) + ' checkTokenDatabase')
+            } else {
+
+                if (result.length > 0) {
+
+                    //Token exists, then lets check if its valid:
+                    //Right now we are just using one bool field...
+                    if (result[0].valid) {
+                        resolve()
+
+                    } else {
+                        reject()
+                    }
+
+                } else {
+                    reject()
+                }
+
+
+            }
+        })
+    })  //End promise
+}
+exports.checkTokenDatabase = checkTokenDatabase;
+
+const saveUserToken = (userWithToken) => {
+    return new Promise((resolve, reject) => {
+
+        const sql = `INSERT INTO login (id_user, token) VALUES (${userWithToken.id_user}, ${mysql.escape(userWithToken.token)});`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(JSON.stringify(error) + ' saveUserToken')
+            } else {
+                resolve(userWithToken)
+            }
+
+        })
+    })
+}
+exports.saveUserToken = saveUserToken;
 
 const loginUserDatabase = (userEmail, userPassword) => {
 

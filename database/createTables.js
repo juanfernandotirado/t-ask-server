@@ -111,7 +111,8 @@ CREATE TABLE Jobs (
             id_login int NOT NULL AUTO_INCREMENT,
             id_user int,
             created timestamp DEFAULT CURRENT_TIMESTAMP,
-            token text,
+            token text,        
+            valid BOOLEAN NOT NULL DEFAULT TRUE,
             PRIMARY KEY (id_login),
             FOREIGN KEY (id_user) REFERENCES Users(id_user)
         );

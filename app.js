@@ -1,6 +1,6 @@
 const express = require('express')
 
-const {fetchArticleWithQuery} = require('./controllers/scrape.js');
+const { fetchArticleWithQuery } = require('./controllers/scrape.js');
 
 
 //*** SETUP BASE ENVIRONMENT ***
@@ -15,11 +15,11 @@ require('./appSetup.js')(app)
 //*** API ***
 const { sendContactMessage } = require(__dirname + '/mailer/mailer-server')
 
-app.post('/articles',(req,res)=>{
-    const queryText = req.body.query;   
+app.post('/articles', (req, res) => {
+    const queryText = req.body.query;
     console.log(queryText);
-    fetchArticleWithQuery(queryText).then(value =>{
-    res.status(200).send(value);
+    fetchArticleWithQuery(queryText).then(value => {
+        res.status(200).send(value);
     })
 
 });
@@ -63,12 +63,19 @@ app.get('/publicKey', (req, res) => {
         })
 })
 
+//Placeholder test for check token middleware
+// app.get('/check', require('./middlewares/token.js').checkToken)
 
 //*** API START ***
 
 app.get('*', (req, res) => {
     res.send('t-ask api v1')
 })
+
+//Error Handler:
+const { errorHandler } = require("./middlewares/errorHandler.js")
+app.use(errorHandler)
+
 
 app.set('port', process.env.PORT || 8080);
 

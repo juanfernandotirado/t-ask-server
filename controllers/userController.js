@@ -1,5 +1,5 @@
-const { createUserDatabase, loginUserDatabase } = require('../database/databaseUtils.js')
-
+const { createUserDatabase, loginUserDatabase, saveUserToken } = require('../database/databaseUtils.js')
+let jwt = require('jsonwebtoken');
 
 const createUser = (req, res) => {
 
@@ -14,10 +14,10 @@ const createUser = (req, res) => {
         newUserPassword,
         userLanguagesArray,
     )
+        .then(createToken)
+
         .then(r => {
-
             res.send(r)
-
         })
         .catch(err => {
 
@@ -40,9 +40,13 @@ const loginUser = (req, res) => {
     let userPassword = req.body.password
 
     loginUserDatabase(userEmail, userPassword)
-        .then(user => {
-            res.send(user)
+        .then(createToken)
+        .then(saveUserToken)
+        .then(userWithToken => {
+
+            res.send(userWithToken)
         })
+
         .catch(err => {
             if (err) {
                 res.send(err)
@@ -53,3 +57,24 @@ const loginUser = (req, res) => {
 }
 
 exports.loginUser = loginUser;
+
+//////////////////////////////////////////
+// Utils:
+//////////////////////////////////////////
+
+const createToken = (user) => {
+    return new Promise((resolve, reject) => {
+
+        //As of now, we are managing token validation on the database.
+
+        // let obj = {
+        //     exp: Math.floor(Date.now() / 1000) + (60 * 60), //Expires in 1h:
+        //     data: user
+        // }
+
+        let token = jwt.sign(user, process.env.JWT_SECRET);
+        user.token = token
+
+        resolve(user)
+    })
+}
