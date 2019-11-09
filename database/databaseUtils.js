@@ -87,7 +87,7 @@ const getLanguagesLatestCount = () => {
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
-                reject('SQL Syntax Error: Cannot return Languages count for Last Time Span.')
+                reject('Database Error: Cannot return Languages count for Last Time Span.')
             } else { resolve(result) }
         })
     })
@@ -145,7 +145,7 @@ const getAllTimeSpanByLanguage = () => {
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
-                reject('SQL Syntax Error: Cannot return Languages for each Time Span.')
+                reject('Database Error: Cannot return Languages for each Time Span.')
             } else {
 
                 console.log(result);
@@ -230,7 +230,7 @@ const getJobCategories = () => {
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
-                reject('SQL Syntax Error: Cannot return Job Categories.')
+                reject('Database Error: Cannot return Job Categories.')
             } else {
                 const getFinalResponse = (result) => {
 
@@ -306,7 +306,7 @@ const getAllJobsForEachLanguages = () => {
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
-                reject('SQL Syntax Error: Cannot return Jobs for each Language.')
+                reject('Database Error: Cannot return Jobs for each Language.')
             } else {
 
                 let idArrays = result.map(item => {
@@ -371,7 +371,7 @@ const getAllJobsForEachLocation = () => {
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
-                reject('SQL Syntax Error: Cannot return Jobs for each Location.')
+                reject('Database Error: Cannot return Jobs for each Location.')
             } else {
                 connectionPool.query(sql, (error, result) => {
                     if (error) {
@@ -787,7 +787,7 @@ const checkTokenDatabase = (token) => {
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
-                reject(JSON.stringify(error) + ' checkTokenDatabase')
+                reject('Database Error: Token not found.')
             } else {
 
                 if (result.length > 0) {

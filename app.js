@@ -69,7 +69,7 @@ app.get('/publicKey', (req, res) => {
 //*** API START ***
 
 app.get('*', (req, res) => {
-    res.send('t-ask api v1')
+    res.send('t-ask api v1')    
 })
 
 //Error Handler:

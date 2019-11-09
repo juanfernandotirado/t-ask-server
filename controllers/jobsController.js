@@ -9,10 +9,12 @@ const jobCategories = (req, res, next) => {
     .catch(err => {
 
         if (err) {
-            //res.send(err)
-            next(err)
+            const e = new Error(err)
+            e.status = 500
+
+            next(e)
         } else {
-            res.send('An error has occurred.')
+            next(err)
         }
     })
 
@@ -32,10 +34,12 @@ const jobsLanguages = (req, res, next) => {
     .catch(err => {
 
         if (err) {
-            //res.send(err)
-            next(err)
+            const e = new Error(err)
+            e.status = 500
+
+            next(e)
         } else {
-            res.send('An error has occurred.')
+            next(err)
         }
     })
 
@@ -55,10 +59,12 @@ const jobsLocations = (req, res, next) => {
     .catch(err => {
 
         if (err) {
-            //res.send(err)
-            next(err)
+            const e = new Error(err)
+            e.status = 500
+
+            next(e)
         } else {
-            res.send('An error has occurred.')
+            next(err)
         }
     })
 

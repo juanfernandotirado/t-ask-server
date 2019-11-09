@@ -8,10 +8,12 @@ const languages = (req, res, next) => {
     })
     .catch(err => {
         if (err) {
-            //res.send(err)
-            next(err)
+            const e = new Error(err)
+            e.status = 500
+
+            next(e)
         } else {
-            res.send('An error has occurred.')
+            next(err)
         }
     })
 
@@ -29,10 +31,12 @@ const languagesTimeSpans = (req, res, next) => {
     })
     .catch(err => {
         if (err) {
-            //res.send(err)
-            next(err)
+            const e = new Error(err)
+            e.status = 500
+
+            next(e)
         } else {
-            res.send('An error has occurred.')
+            next(err)
         }
     })
 

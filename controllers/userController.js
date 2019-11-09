@@ -22,10 +22,12 @@ const createUser = (req, res, next) => {
         .catch(err => {
 
             if (err) {
-                //res.send(err)
-                next(err)
+                const e = new Error(err)
+                e.status = 422
+
+                next(e)
             } else {
-                res.send('An error has occurred.')
+                next(err)
             }
         })
 
@@ -49,12 +51,16 @@ const loginUser = (req, res, next) => {
         })
 
         .catch(err => {
+
             if (err) {
-                //res.send(err)
-                next(err)
+                const e = new Error(err)
+                e.status = 401
+
+                next(e)
             } else {
-                res.send('An error has occurred.')
+                next(err)
             }
+
         })
 }
 
