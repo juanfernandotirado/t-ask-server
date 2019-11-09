@@ -1,11 +1,23 @@
 const googleTrends = require('google-trends-api');
 const { getComparisonArrays, getValuesInProportion } = require('./trendsUtils.js')
-const { getLanguagesLatestCount } = require('../database/databaseUtils.js')
+const { getLanguagesLatestCount, getLatestTimeSpan } = require('../database/databaseUtils.js')
 
 //TODO - Refactor hardcoded date for trends
 
 let cachedTrends;
 let lastRequestTime;
+
+/**
+ * As soon as this script runs, we will get the latest timespan,
+ * To be used by google trends request. (As a global variable)
+ */
+let latestTimeSpan;
+
+getLatestTimeSpan()
+    .then(t => {
+        latestTimeSpan = t[0]
+    })
+
 
 const trends = (req, res, next) => {
 
@@ -73,7 +85,7 @@ const trends = (req, res, next) => {
                 //....................//....................//....................
 
             })
-            .catch(err =>{
+            .catch(err => {
 
                 if (err) {
                     const e = new Error(err)
@@ -112,7 +124,7 @@ const startRequestingTrends = (languages) => {
         /** Another promise chain - RESULT HERE */
 
         getComparisonArrays(languages)
-            .then(arrayComparisons => {        
+            .then(arrayComparisons => {
 
                 getAllTrends([...arrayComparisons])
                     .then(arrayOfTrends => {
@@ -121,8 +133,12 @@ const startRequestingTrends = (languages) => {
 
                         resolve(trends)
                     })
+                    .catch(err => {
+                        reject(err)
+                    })
+
             }) /** End final inner chain */
-            .catch(err =>{
+            .catch(err => {
                 reject(err)
             })
 
@@ -169,11 +185,16 @@ const getTrendLanguages = (languagesArray) => {
 
     return new Promise((resolve, reject) => {
 
+        if (!latestTimeSpan) {
+            reject('Not possible to get latest timespan!')
+            return
+        }
+
         googleTrends.interestByRegion(
             {
                 keyword: languagesArray,
-                startTime: new Date('2019-01-01'),
-                endTime: new Date('2019-06-30'),
+                startTime: latestTimeSpan.start,
+                endTime: latestTimeSpan.end,
                 category: 31
             })
             .then(results => {

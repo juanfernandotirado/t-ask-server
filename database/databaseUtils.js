@@ -70,6 +70,28 @@ const getTimeSpans = () => {
 
 exports.getTimeSpans = getTimeSpans;
 
+/**
+ * Latest completed timespan.
+ */
+const getLatestTimeSpan = () => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql =
+        `SELECT * FROM TimeSpan WHERE start = 
+        (SELECT MAX(start) FROM TimeSpan)
+        `
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+            } else { resolve(result) }
+        })
+    })
+}
+
+exports.getLatestTimeSpan = getLatestTimeSpan;
+
 //////////////////////////////////////////////////////////////////////
 
 const getLanguagesLatestCount = () => {
