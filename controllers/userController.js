@@ -1,7 +1,7 @@
 const { createUserDatabase, loginUserDatabase, saveUserToken } = require('../database/databaseUtils.js')
 let jwt = require('jsonwebtoken');
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
 
     let newUserName = req.body.name
     let newUserEmail = req.body.email
@@ -22,7 +22,8 @@ const createUser = (req, res) => {
         .catch(err => {
 
             if (err) {
-                res.send(err)
+                //res.send(err)
+                next(err)
             } else {
                 res.send('An error has occurred.')
             }
@@ -34,7 +35,7 @@ exports.createUser = createUser;
 
 //////////////////////////////////////////////////////////////////////
 
-const loginUser = (req, res) => {
+const loginUser = (req, res, next) => {
 
     let userEmail = req.body.email
     let userPassword = req.body.password
@@ -49,7 +50,8 @@ const loginUser = (req, res) => {
 
         .catch(err => {
             if (err) {
-                res.send(err)
+                //res.send(err)
+                next(err)
             } else {
                 res.send('An error has occurred.')
             }

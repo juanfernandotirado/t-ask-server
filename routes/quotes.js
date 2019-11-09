@@ -3,17 +3,9 @@ const express = require("express");
 const router = express.Router();
 
 
-const { getQuotes } = require('../database/databaseUtils.js')
+const { quotes } = require('../controllers/quotesController.js')
 
-router.get('/', (req, res) => {
-
-    getQuotes()
-        .then(result => {
-            res.send(result)
-
-        })
-
-})
+router.get('/', quotes)
 
 module.exports.quotesRouter = router;
 
