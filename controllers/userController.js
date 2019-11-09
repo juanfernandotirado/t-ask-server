@@ -1,4 +1,6 @@
+const { validationResult } = require('express-validator');
 const { createUserDatabase, loginUserDatabase, saveUserToken, getUserDatabase } = require('../database/databaseUtils.js')
+
 let jwt = require('jsonwebtoken');
 
 const getUser = (req, res, next) => {
@@ -26,6 +28,22 @@ const getUser = (req, res, next) => {
 module.exports.getUser = getUser
 
 const createUser = (req, res, next) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        let error = new Error();
+
+        error.status = 422;
+
+        let newdata = errors.array().map(item => {
+            return item.msg
+        });
+
+        error.message = newdata;
+
+        next(error);
+    }
 
     let newUserName = req.body.name
     let newUserEmail = req.body.email
@@ -62,6 +80,23 @@ exports.createUser = createUser;
 //////////////////////////////////////////////////////////////////////
 
 const loginUser = (req, res, next) => {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        let error = new Error();
+
+        error.status = 422;
+
+        let newdata = errors.array().map(item => {
+            return item.msg
+        });
+
+        error.message = newdata;
+
+        next(error);
+    }
+
 
     let userEmail = req.body.email
     let userPassword = req.body.password

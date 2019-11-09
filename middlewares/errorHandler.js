@@ -1,10 +1,10 @@
 module.exports.errorHandler = (err, req, res, next) => {
 
     res.status(500)
-    let response = 'An error has occurred.'
+    let response = ['An error has occurred.']
 
     if (typeof (err) === 'string') {
-        response = err
+        response = [err]
     }
 
     if (err.status) {
@@ -12,8 +12,14 @@ module.exports.errorHandler = (err, req, res, next) => {
     }
 
     if (err.message) {
-        response = err.message
+
+        if(typeof (err.message) == 'string'){
+            response = [err.message]
+        }else{
+            response = err.message
+        }
+
     }
 
-    res.send({ message: response })
+    res.send({ messages: response })
 }
