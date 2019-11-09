@@ -1,5 +1,29 @@
-const { createUserDatabase, loginUserDatabase, saveUserToken } = require('../database/databaseUtils.js')
+const { createUserDatabase, loginUserDatabase, saveUserToken, getUserDatabase } = require('../database/databaseUtils.js')
 let jwt = require('jsonwebtoken');
+
+const getUser = (req, res, next) => {
+    const user_id = req.body.user_id;
+
+    if (user_id) {
+
+        getUserDatabase(user_id)
+            .then(r => {
+                res.send(r)
+            })
+            .catch(err => {
+                const e = new Error(err)
+                e.status = 401
+                next(e)
+            })
+
+    } else {
+        const e = new Error('User not found.')
+        e.status = 401
+        next(e)
+    }
+}
+
+module.exports.getUser = getUser
 
 const createUser = (req, res, next) => {
 

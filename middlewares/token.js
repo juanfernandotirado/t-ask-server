@@ -12,16 +12,19 @@ exports.checkToken = (req, res, next) => {
     const token = req.headers['x-access-token'];
 
     try {
-
-
         let verifiedObject = jwt.verify(token, process.env.JWT_SECRET)
         // if (Date.now() < verifiedObject.iat)
 
         //If reached here, then this is actually a token.
         //Now lets check if its created date in the database (Not with the JWT lib)
         checkTokenDatabase(token)
-            .then(r => {
-                next()  //Valid!
+            .then(user_id => {                
+                
+                //Valid!
+                //Then adds the user_id to the req body:
+                req.body.user_id = user_id
+
+                next()
             })
             .catch(err => {
                 if (err) {
