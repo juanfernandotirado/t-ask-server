@@ -216,18 +216,8 @@ const getJobCategories = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT Jobs.soc, JobCategories.name, Jobs.id_location, count(case when Jobs.id_location = 1 then 1 else null end) as US, count(case when Jobs.id_location = 2 then 1 else null end) as CA
-        FROM Jobs
-
-        INNER JOIN JobCategories
-        ON JobCategories.soc = Jobs.soc
-
-        WHERE Jobs.created > (SELECT MAX(start) FROM TimeSpan)
-
-        GROUP BY Jobs.id_location,JobCategories.soc
-
-        ;`
-
+        let sql = `SELECT * FROM jobs_categories;`
+    
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject('Database Error: Cannot return Job Categories.')
@@ -286,23 +276,7 @@ const getAllJobsForEachLanguages = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT JobsLanguages.id_language, Jobs.id_timespan, TimeSpan.start, TimeSpan.end, Languages.name,COUNT (*) AS 'totalJobs'
-            FROM Jobs
-
-            INNER JOIN TimeSpan
-            ON Jobs.id_timespan = TimeSpan.id_timespan
-            
-            INNER JOIN JobsLanguages
-            ON Jobs.id_job = JobsLanguages.id_job
-
-            INNER JOIN Languages
-            ON JobsLanguages.id_Language = Languages.id_Language
-
-            GROUP BY JobsLanguages.id_language, TimeSpan.id_timespan
-            
-            ORDER BY Languages.id_Language ASC, TimeSpan.start ASC
-
-            ;`
+        let sql = `SELECT * FROM jobs_languages;`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
@@ -349,25 +323,7 @@ const getAllJobsForEachLocation = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT JobsLanguages.id_language, Languages.name, count(case when Jobs.id_location = 1 then 1 else null end) as jobsUS, count(case when Jobs.id_location = 2 then 1 else null end) as jobsCA
-        FROM Jobs
-
-        INNER JOIN TimeSpan
-        ON Jobs.id_timespan = TimeSpan.id_timespan
-            
-        INNER JOIN JobsLanguages
-        ON Jobs.id_job = JobsLanguages.id_job
-
-        INNER JOIN Languages
-        ON JobsLanguages.id_Language = Languages.id_Language
-
-        WHERE start = (SELECT MAX(start) FROM TimeSpan)
-
-        GROUP BY JobsLanguages.id_language, TimeSpan.id_timespan
-            
-        ORDER BY Languages.id_Language ASC, TimeSpan.start ASC
-
-        ;`
+        let sql = `SELECT * FROM jobs_locations;`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
