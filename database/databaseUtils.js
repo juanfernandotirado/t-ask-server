@@ -217,7 +217,7 @@ const getJobCategories = () => {
     return new Promise((resolve, reject) => {
 
         let sql = `SELECT * FROM jobs_categories;`
-    
+
         connectionPool.query(sql, (error, result) => {
             if (error) {
                 reject('Database Error: Cannot return Job Categories.')
@@ -368,6 +368,7 @@ const getAllJobsForEachLocation = () => {
     })
 }
 
+exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
 
 /**
  * Mapping the final response to follow the same pattern
@@ -413,8 +414,6 @@ const getFinalResponse = (finalArray) => {
     return finalArrayCountries
 
 }
-
-exports.getAllJobsForEachLocation = getAllJobsForEachLocation;
 
 /////////////////////////////////////////////////////////
 
@@ -751,7 +750,7 @@ const checkTokenDatabase = (token) => {
                     //Token exists, then lets check if its valid:
                     //Right now we are just using one bool field...
                     if (result[0].valid) {
-                        resolve()
+                        resolve(result[0].id_user)
 
                     } else {
                         reject()
@@ -809,19 +808,7 @@ const loginUserDatabase = (userEmail, userPassword) => {
                 reject('Email or Password Incorrect!')
             } else {
 
-                let favoriteLanguages = []
-
-                result.map(item => {
-                    favoriteLanguages.push(item.id_language)
-                })
-
-                const currentUser = {
-                    "id_user": result[0].id_user,
-                    "name": result[0].name,
-                    "email": result[0].email,
-                    "favoriteLanguages": favoriteLanguages
-                }
-
+                const currentUser = buildUserObject(result)
 
                 resolve(currentUser)
             }
@@ -833,3 +820,54 @@ const loginUserDatabase = (userEmail, userPassword) => {
 }
 
 exports.loginUserDatabase = loginUserDatabase;
+
+const getUserDatabase = (user_id) => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT *
+
+        FROM Users
+
+        INNER JOIN LanguagesUsers
+
+        ON Users.id_user = LanguagesUsers.id_user
+
+        WHERE Users.id_user = ${user_id}
+        ;`
+
+        connectionPool.query(sql, (error, result) => {
+
+            if (error) {
+                reject(error)
+
+            } else if (result.length < 1) {
+                reject('User not found!')
+            } else {
+                const currentUser = buildUserObject(result)
+                resolve(currentUser)
+            }
+        })
+    })  //End promise
+}
+
+exports.getUserDatabase = getUserDatabase;
+
+/**
+ * Builds user response object from result:
+ */
+const buildUserObject = (result) => {
+
+    let favoriteLanguages = []
+
+    result.map(item => {
+        favoriteLanguages.push(item.id_language)
+    })
+
+    return {
+        "id_user": result[0].id_user,
+        "name": result[0].name,
+        "email": result[0].email,
+        "favoriteLanguages": favoriteLanguages
+    }
+}
