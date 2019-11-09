@@ -1,15 +1,19 @@
 module.exports.errorHandler = (err, req, res, next) => {
 
+    res.status(500)
+    let response = 'An error has occurred.'
+
     if (typeof (err) === 'string') {
-        // custom application error
-        return res.status(400).json({ message: err })
+        response = err
     }
 
-    if (err === 401) {
-        // jwt authentication error
-        return res.status(err).json({ message: 'Access denied: Unauthorized.' })
+    if (err.status) {
+        res.status(err.status)
     }
 
-    // default to 500 server error
-    return res.status(500).json({ message: err.message })
+    if (err.message) {
+        response = err.message
+    }
+
+    res.send({ message: response })
 }

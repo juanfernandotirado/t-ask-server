@@ -1,62 +1,28 @@
 const express = require("express");
 const router = express.Router();
 
-const { getLanguagesLatestCount } = require('../database/databaseUtils.js')
-const { getAllTimeSpanByLanguage } = require('../database/databaseUtils.js')
+const { languages, languagesTimeSpans} = require('../controllers/languagesController.js')
 
-const { getJobCategories } = require('../database/databaseUtils.js')
-const { getAllJobsForEachLanguages } = require('../database/databaseUtils.js')
-const { getAllJobsForEachLocation } = require('../database/databaseUtils.js')
+const { jobCategories, jobsLanguages, jobsLocations } = require('../controllers/jobsController.js')
 
 
-
-router.get('/languages', (req, res) => {
-
-    getLanguagesLatestCount()
-        .then(result => {
-            res.send(result)
-        })
-})
+router.get('/languages', languages)
 
 ////////////////////////////////////////////////////////////////////
 
-router.get('/languages/timespans', (req, res) => {
-
-    getAllTimeSpanByLanguage()
-        .then(result => {
-            res.send(result)
-        })
-})
+router.get('/languages/timespans', languagesTimeSpans)
 
 ////////////////////////////////////////////////////////////////////
 
-router.get('/jobs/jobcategories', (req, res) => {
-
-    getJobCategories()
-        .then(result => {
-            res.send(result)
-        })
-})
+router.get('/jobs/jobcategories', jobCategories)
 
 ////////////////////////////////////////////////////////////////////
 
-router.get('/jobs/languages', (req, res) => {
-
-    getAllJobsForEachLanguages()
-        .then(result => {
-            res.send(result)
-        })
-})
+router.get('/jobs/languages', jobsLanguages)
 
 ////////////////////////////////////////////////////////////////////
 
-router.get('/jobs/locations', (req, res) => {
-
-    getAllJobsForEachLocation()
-        .then(result => {
-            res.send(result)
-        })
-})
+router.get('/jobs/locations', jobsLocations)
 
 
 

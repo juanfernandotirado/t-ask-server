@@ -5,8 +5,8 @@ const { createUser, loginUser } = require('../controllers/userController.js')
 const { securityMiddleware } = require('../middlewares/security.js')
 
 
-router.post('/signup', securityMiddleware, createUser)
+router.post('/signup', /* securityMiddleware, */ createUser)
 
-router.post('/login', securityMiddleware, loginUser)
+router.post('/login', /* securityMiddleware, */ loginUser)
 
 module.exports.userRouter = router;

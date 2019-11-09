@@ -24,14 +24,25 @@ exports.checkToken = (req, res, next) => {
                 next()  //Valid!
             })
             .catch(err => {
-                next(401)
+                if (err) {
+                    const e = new Error(err)
+                    e.status = 401
+
+                    next(e)
+                } else {
+                    next(err)
+                }
             })
 
-    } catch (e) {
+    } catch (exception) {
 
-        console.log('No token provided!');
-        console.log(e);
+        if (exception) {
+            const e = new Error('No token provided!')
+            e.status = 401
 
-        next(401)
+            next(e)
+        } else {
+            next(exception)
+        }
     }
 }
