@@ -10,10 +10,10 @@ const { getFirstTimeSpanId } = require('../../databaseUtils.js');
 //
 ////////////////////////////////////////////////
 
-const FILE_FINAL = __dirname + '/output/jobsFINAL.json'
+const FILE_FINAL = __dirname + `/output/jobsFINAL${process.env._NUM}.json`
 
-let jobs = require(__dirname + '/output/jobs.json')
-let jobsTechTags = require(__dirname + '/output/jobsTechTags.json')
+let jobs = require(__dirname + `/output/jobs${process.env._NUM}.json`)
+let jobsTechTags = require(__dirname + `/output/jobsTechTags${process.env._NUM}.json`)
 
 ////////////////////////////////////////////////
 //

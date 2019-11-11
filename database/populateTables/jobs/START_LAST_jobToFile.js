@@ -8,7 +8,7 @@ const populateJobsToFile = () => {
         console.log('populatingJobs...');
 
         //Gets all jobs with hashes from file:
-        const jobs = require(__dirname + "/output/jobsFINAL.json");
+        const jobs = require(__dirname + `/output/jobsFINAL${process.env._NUM}.json`);
 
         //Then save jobs on database:
         let textINSERT = ''
@@ -21,7 +21,7 @@ const populateJobsToFile = () => {
 
         console.log('populatingJobs... Creating file...');
 
-        writeToFile(textINSERT, '/output/jobsINSERT.txt', () => {
+        writeToFile(textINSERT, `/output/jobsINSERT${process.env._NUM}.txt`, () => {
             console.log('populatingJobs... DONE');
             resolve(jobs)
         })
@@ -36,7 +36,7 @@ const populateJobsLanguagesToFile = () => {
     return new Promise((resolve, reject) => {
 
         //Gets all jobs with hashes from file:
-        let jobs = require(__dirname + "/output/jobsFINAL.json");
+        let jobs = require(__dirname + `/output/jobsFINAL${process.env._NUM}.json`);
 
         console.log('populateJobsLanguages...');
 
@@ -91,7 +91,7 @@ const populateJobsLanguagesToFile = () => {
 
                         console.log('populateJobsLanguages... Creating file...');
 
-                        writeToFile(textINSERT, '/output/jobsLanguagesINSERT.txt', () => {
+                        writeToFile(textINSERT, `/output/jobsLanguagesINSERT${process.env._NUM}.txt`, () => {
                             console.log('populateJobsLanguages... DONE');
                             resolve()
                         })
