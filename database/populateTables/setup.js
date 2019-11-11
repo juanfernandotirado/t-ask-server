@@ -78,7 +78,7 @@ const clearTablesJobs = () => {
 
 // clearTablesLanguages()
 // .then(populateLanguages)
-populateLanguagesDescriptions()
+// populateLanguagesDescriptions()
     // .then(populateTimeSpans)
     // .then(populateLanguagesTimeSpan)
     // .then(r => {

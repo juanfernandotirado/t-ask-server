@@ -2,11 +2,11 @@ const { connectionPool } = require('./connection.js');
 
 const mysql = require('mysql')
 
-const getJobIds = () => {
+const countJobs = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT id_job FROM Jobs;`
+        let sql = `SELECT COUNT(*) FROM Jobs;`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
@@ -21,7 +21,71 @@ const getJobIds = () => {
     })
 }
 
-exports.getJobIds = getJobIds;
+exports.countJobs = countJobs;
+
+const countJobsLangs = () => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT COUNT(*) FROM JobsLanguages;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+
+            } else {
+
+                resolve(result)
+            }
+
+        })
+    })
+}
+
+exports.countJobsLangs = countJobsLangs;
+
+const getFirstTimeSpanId = () => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT id_timespan FROM TimeSpan LIMIT 1;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+
+            } else {
+
+                resolve(result[0].id_timespan)
+            }
+
+        })
+    })
+}
+
+exports.getFirstTimeSpanId = getFirstTimeSpanId;
+
+
+const getJobHashesPending = () => {
+
+    return new Promise((resolve, reject) => {
+
+        let sql = `SELECT * FROM Jobs WHERE hash IS NOT NULL;`
+
+        connectionPool.query(sql, (error, result) => {
+            if (error) {
+                reject(error)
+
+            } else {
+
+                resolve(result)
+            }
+
+        })
+    })
+}
+
+exports.getJobHashesPending = getJobHashesPending;
 
 const getLanguages = () => {
 

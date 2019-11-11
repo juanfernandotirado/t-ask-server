@@ -16,6 +16,7 @@ CREATE TABLE Jobs (
     id_location int,
     created datetime,
     soc int,
+    hash text NULL,
     PRIMARY KEY (id_job),
     FOREIGN KEY (soc) REFERENCES JobCategories(soc),
     FOREIGN KEY (id_location) REFERENCES Location(id_location),

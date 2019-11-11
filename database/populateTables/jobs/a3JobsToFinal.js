@@ -4,6 +4,8 @@
 const { getIdTimeSpan } = require('../timeSpan.js');
 const fs = require('fs');
 
+const { getFirstTimeSpanId } = require('../../databaseUtils.js');
+
 //
 //
 ////////////////////////////////////////////////
@@ -33,44 +35,51 @@ const writeToFile = (obj) => {
 
 const mergeJobsFinal = () => {
 
-    jobs.forEach(itemJob => {
-        let indexToRemoveFromJobs = -1
-        const f = jobsTechTags.data.filter((item, index) => {
+    getFirstTimeSpanId()
+        .then(ID_TIMESPAN => {
 
-            let check = item.id === itemJob.hash
+            console.log(ID_TIMESPAN);
 
-            if (check) {
-                indexToRemoveFromJobs = index
-            }
+            jobs.forEach(itemJob => {
+                let indexToRemoveFromJobs = -1
+                const f = jobsTechTags.data.filter((item, index) => {
 
-            return check
-        })
+                    let check = item.id === itemJob.hash
 
-        if (indexToRemoveFromJobs >= 0)
-            jobsTechTags.data.splice(indexToRemoveFromJobs, 1)
+                    if (check) {
+                        indexToRemoveFromJobs = index
+                    }
 
-
-        if (f.length > 0) {
-
-            //NOTE - We are ignoring ALL jobs before and after the timespans we determined
-            let timeSpanId = getIdTimeSpan(1, itemJob.created)
-
-            if (timeSpanId >= 1) {
-                array.push({
-                    hash: itemJob.hash,
-                    country: itemJob.country,
-                    created: itemJob.created,
-                    soc: itemJob.soc,
-                    id_timespan: timeSpanId,
-
-                    findings: f.keys
+                    return check
                 })
-            }
 
-        } //End if length
-    }) //End foreach jobs
+                if (indexToRemoveFromJobs >= 0)
+                    jobsTechTags.data.splice(indexToRemoveFromJobs, 1)            
+                
+                if (f.length > 0) {                
 
-    writeToFile(array)
+                    //NOTE - We are ignoring ALL jobs before and after the timespans we determined
+                    let timeSpanId = getIdTimeSpan(ID_TIMESPAN, itemJob.created)                                        
+
+                    if (timeSpanId >= ID_TIMESPAN) {                                             
+                        
+                        array.push({
+                            hash: itemJob.hash,
+                            country: itemJob.country,
+                            created: itemJob.created,
+                            soc: itemJob.soc,
+                            id_timespan: timeSpanId,
+
+                            findings: f[0].keys
+                        })
+                    }
+
+                } //End if length
+            }) //End foreach jobs
+
+            writeToFile(array)
+
+        })  //END first id timespan
 }
 
 mergeJobsFinal()

@@ -2,7 +2,6 @@ const express = require('express')
 
 const { fetchArticleWithQuery } = require('./controllers/scrape.js');
 
-
 //*** SETUP BASE ENVIRONMENT ***
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 require('dotenv').config()
@@ -63,13 +62,32 @@ app.get('/publicKey', (req, res) => {
         })
 })
 
-//Placeholder test for check token middleware
-// app.get('/check', require('./middlewares/token.js').checkToken)
+/**
+ * DEBUG - DEVELOPMENT
+ */
+if (process.env.NODE_ENV === 'development') {
 
-//*** API START ***
+    const { countJobs } = require('./database/databaseUtils.js')
+    app.get('/count', (req, res) => {
+        countJobs()
+            .then(r => {
+                res.send(r)
+            })
+    })
+
+    const { countJobsLangs } = require('./database/databaseUtils.js')
+    app.get('/count2', (req, res) => {
+        countJobsLangs()
+            .then(r => {
+                res.send(r)
+            })
+    })
+}
+
+/* *** END DEBUG - DEVELOPMENT *** */
 
 app.get('*', (req, res) => {
-    res.send('t-ask api v1')    
+    res.send('t-ask api v1')
 })
 
 //Error Handler:

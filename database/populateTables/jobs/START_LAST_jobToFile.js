@@ -1,5 +1,5 @@
 const { connectionPool } = require('../../connection.js');
-const { getLanguages, getJobIds } = require('../../databaseUtils.js');
+const { getLanguages, getJobHashesPending } = require('../../databaseUtils.js');
 const fs = require('fs');
 
 const populateJobsToFile = () => {
@@ -16,7 +16,7 @@ const populateJobsToFile = () => {
         jobs.forEach(item => {
             const { hash, country, created, soc, id_timespan } = item
             textINSERT +=
-                `INSERT INTO Jobs (id_location, created, soc, id_timespan) VALUES ('${country}', '${created}', '${soc}', '${id_timespan}' );`
+                `INSERT INTO Jobs (id_location, created, soc, id_timespan, hash) VALUES ('${country}', '${created}', '${soc}', '${id_timespan}', '${hash}' );`
         })
 
         console.log('populatingJobs... Creating file...');
@@ -32,11 +32,11 @@ const populateJobsToFile = () => {
 
 exports.populateJobsToFile = populateJobsToFile
 
-const populateJobsLanguagesToFile = (jobs) => {
+const populateJobsLanguagesToFile = () => {
     return new Promise((resolve, reject) => {
 
         //Gets all jobs with hashes from file:
-        const jobs = require(__dirname + "/output/jobsFINAL.json");
+        let jobs = require(__dirname + "/output/jobsFINAL.json");
 
         console.log('populateJobsLanguages...');
 
@@ -45,17 +45,33 @@ const populateJobsLanguagesToFile = (jobs) => {
             .then(languages => {
 
                 //Get all jobs from DB (For the ID):
-                getJobIds()
-                    .then(jobIds => {
+                getJobHashesPending()
+                    .then(jobsHashes => {
+
+                        //Adds ids to final jobs:
+                        jobs = jobs.map(item => {
+
+                            let j = jobsHashes.find(i => {
+                                return i.hash === item.hash
+                            })
+
+                            item.id_job = j.id_job
+
+                            return item
+                        })
+                        //------------------------------
 
                         let textINSERT = ''
                         //...And save all job-languages relation:
                         jobs.forEach((item, index) => {
 
+
+                            console.log(item);
+                            
                             // item.keys.
                             item.findings.forEach(languageTag => {
 
-                                const id_job = jobIds[index].id_job
+                                const id_job = item.id_job
                                 let id_language = languages.find(l => {
                                     return l.name == languageTag
                                 })
@@ -69,6 +85,9 @@ const populateJobsLanguagesToFile = (jobs) => {
 
                         })
                         //...
+
+                        //CLEAR ALL HASHES:
+                        textINSERT += `UPDATE Jobs SET hash = NULL;`
 
                         console.log('populateJobsLanguages... Creating file...');
 
@@ -86,7 +105,6 @@ const populateJobsLanguagesToFile = (jobs) => {
 }
 
 exports.populateJobsLanguagesToFile = populateJobsLanguagesToFile
-
 
 //......
 
