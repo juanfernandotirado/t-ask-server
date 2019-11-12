@@ -1,7 +1,5 @@
 const express = require('express')
 
-const { fetchArticleWithQuery } = require('./controllers/scrape.js');
-
 //*** SETUP BASE ENVIRONMENT ***
 process.env.NODE_ENV = process.env.NODE_ENV || 'development'
 require('dotenv').config()
@@ -13,15 +11,6 @@ require('./appSetup.js')(app)
 
 //*** API ***
 const { sendContactMessage } = require(__dirname + '/mailer/mailer-server')
-
-app.post('/articles', (req, res) => {
-    const queryText = req.body.query;
-    console.log(queryText);
-    fetchArticleWithQuery(queryText).then(value => {
-        res.status(200).send(value);
-    })
-
-});
 
 app.post('/contact-message', (req, res) => {
     sendContactMessage(req.body).then(() => {
