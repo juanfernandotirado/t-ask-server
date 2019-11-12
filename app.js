@@ -8,28 +8,12 @@ require('dotenv').config()
 const app = express()
 require('./appSetup.js')(app)
 
-
-//*** API ***
-const { sendContactMessage } = require(__dirname + '/mailer/mailer-server')
-
-app.post('/contact-message', (req, res) => {
-    sendContactMessage(req.body).then(() => {
-        res.status(200)
-            .send({ isSent: true });
-    }).catch((error) => {
-        res.status(500)
-            .send({ isSent: false, error: error });
-    });
-
-});
-
 //*** ***/
 
 const { routerIndex } = require('./routes/index.js')
 app.use('/api', routerIndex)
 
 //*** ***/
-
 
 
 /**

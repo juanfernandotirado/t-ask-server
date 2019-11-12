@@ -1,9 +1,34 @@
 const nodemailer = require('nodemailer');
 
+const contactHandler = (req, res, next) => {
+
+    sendContactMessage(req.body).then(() => {
+        res.status(200)
+            .send({ isSent: true });
+    })
+        .catch(err => {
+
+            if (err) {
+                const e = new Error(err)
+                e.status = 500
+                send({ isSent: false, error: error })
+                next(e)
+            } else {
+                next(err)
+            }
+
+        })
+
+}
+
+exports.contactHandler = contactHandler;
+
+
 async function sendContactMessage(data) {
     // Generate test SMTP service account from ethereal.email Only needed if you
     // don't have a real mail account for testing
-   
+console.log(data);
+
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -12,11 +37,11 @@ async function sendContactMessage(data) {
             user: "t-ask@iamjohnnguyen.com",
             pass: "helloworld123"
         },
-        tls:{
-            rejectUnauthorized:false
+        tls: {
+            rejectUnauthorized: false
         }
     });
-    
+
     //Verify transporter
     // await transporter.verify(function(error, success) {
     //     if (error) {
@@ -49,5 +74,3 @@ async function sendContactMessage(data) {
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 
 }
-
-exports.sendContactMessage = sendContactMessage;
