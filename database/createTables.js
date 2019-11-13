@@ -8,6 +8,7 @@ const createTables = `
 CREATE TABLE JobCategories (
     soc int NOT NULL AUTO_INCREMENT,
     name varchar(255),
+    description text,
     PRIMARY KEY (soc)
     );
 
@@ -87,6 +88,7 @@ CREATE TABLE Jobs (
         id_quote int NOT NULL AUTO_INCREMENT,
         quote text,
         id_language int,
+        type varchar(255),
         PRIMARY KEY (id_quote),
         FOREIGN KEY (id_language) REFERENCES Languages(id_language)
         );
