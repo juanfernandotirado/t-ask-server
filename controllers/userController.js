@@ -55,8 +55,9 @@ const createUser = (req, res, next) => {
         newUserEmail,
         newUserPassword,
         userLanguagesArray,
-    )
+    )    
         .then(createToken)
+        .then(saveUserToken)
 
         .then(r => {
             res.send(r)
