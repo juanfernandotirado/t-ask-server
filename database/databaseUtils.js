@@ -323,11 +323,13 @@ const getJobCategories = () => {
                     }
                     //...
                     result.forEach(item => {
-
+                        console.log(item);
+                        
                         if (item.id_location == 1) {
                             objUS.data.push({
                                 soc: item.soc,
                                 name: item.name,
+                                description:item.description,
                                 totalJobs: item['US'],
                             })
                         }
@@ -336,6 +338,7 @@ const getJobCategories = () => {
                             objCA.data.push({
                                 soc: item.soc,
                                 name: item.name,
+                                description:item.description,
                                 totalJobs: item['CA'],
                             })
                         }

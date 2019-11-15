@@ -229,7 +229,7 @@ let DROP_VIEW_JOSBS_CATEGORIES = `DROP VIEW IF EXISTS jobs_categories;`
 
 let QUERY_JOSBS_CATEGORIES =
 `
-SELECT Jobs.soc, JobCategories.name, Jobs.id_location, count(case when Jobs.id_location = 1 then 1 else null end) as US, count(case when Jobs.id_location = 2 then 1 else null end) as CA
+SELECT Jobs.soc, JobCategories.name, Jobs.id_location, JobCategories.description, count(case when Jobs.id_location = 1 then 1 else null end) as US, count(case when Jobs.id_location = 2 then 1 else null end) as CA
         FROM Jobs
 
         INNER JOIN JobCategories
