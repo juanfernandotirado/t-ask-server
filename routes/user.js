@@ -7,9 +7,9 @@ const { createUserValidators, loginValidators } = require('../middlewares/valida
 
 const { checkToken } = require('../middlewares/token.js')
 
-router.post('/signup', securityMiddleware, createUserValidators, createUser)
+router.post('/signup', /* securityMiddleware, */ createUserValidators, createUser)
 
-router.post('/login', securityMiddleware, loginValidators, loginUser)
+router.post('/login', /* securityMiddleware, */ loginValidators, loginUser)
 
 //Receives a token in the header, and returns user data.
 router.get('/', checkToken, getUser)
