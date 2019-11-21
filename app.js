@@ -12,6 +12,7 @@ require('./appSetup.js')(app)
 
 const { routerIndex } = require('./routes/index.js')
 app.use('/api', routerIndex)
+app.use('/api/v1', routerIndex)
 
 //*** ***/
 

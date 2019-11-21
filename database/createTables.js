@@ -258,10 +258,14 @@ const jobsCategoriesView = () => {
 
 ////////////////////////////////////////////////
 
-/////
-
+// To create all tables at once, uncomment an run below function
 
 // createTablesDatabase()
+
+////////////////////////////////////////////////
+
+// To create Views uncomment and run the functions below
+
 // jobsLanguagesView()
 // jobsLocationsView()
 // jobsCategoriesView()
