@@ -15,6 +15,9 @@ const { populateLanguages, populateLanguagesDescriptions } = require('./language
 const { populateTimeSpans } = require('./timeSpan.js');
 const { populateLanguagesTimeSpan } = require('./languagesTimeSpan.js');
 
+const { populateLocations } = require('./locations.js');
+
+
 
 const clearTablesLanguages = () => {
     return new Promise((resolve, reject) => {
@@ -119,3 +122,9 @@ const clearTablesJobs = () => {
 //         console.log(`ALL DONE`);
 //         process.exit()
 //     })
+
+//** ********************************** */
+//** LOCATIONS */
+//** ********************************** */
+
+// populateLocations()
