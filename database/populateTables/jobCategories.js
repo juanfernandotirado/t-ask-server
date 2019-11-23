@@ -26,7 +26,7 @@ const array = [
     { soc: 15119905, name: 'Geographic Information Systems Technicians', description: `Assist scientists in building, maintaining or using geographic information systems databases.` },
     { soc: 15119906, name: 'Database Architects', description: `Design strategies for enterprise database systems. Design and construct large relational databases.` },
     { soc: 15119907, name: 'Data Warehousing Specialists', description: `Program and configure warehouses of database information and provide support to its users.` },
-    { soc: 15119908, name: 'Business Intelligence Analysts', description: `Build financial and market intelligence by querying data repositories and creating periodic reports.` },
+    { soc: 15119908, name: 'Business Intelligence Analysts', description: `Build financial and market intelligence by querying data repositories and creating reports.` },
     { soc: 15119909, name: 'Information Technology Project Managers', description: `Plan, initiate and manage information technology projects while assessing business implications.` },
     { soc: 15119910, name: 'Search Marketing Strategists', description: `Examine search query behaviors on general or specialty search engines.` },
     { soc: 15119911, name: 'Video Game Designers', description: `Design core features of video games. Create and maintain design documentation.` },
