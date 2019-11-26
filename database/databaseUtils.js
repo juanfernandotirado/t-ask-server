@@ -510,7 +510,7 @@ const getQuotes = () => {
 
     return new Promise((resolve, reject) => {
 
-        let sql = `SELECT Quotes.quote, Quotes.id_quote, Languages.id_language, Languages.name
+        let sql = `SELECT Quotes.quote, Quotes.id_quote, Quotes.type, Languages.id_language, Languages.name
         FROM Quotes
 
         INNER JOIN Languages
