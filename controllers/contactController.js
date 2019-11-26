@@ -24,11 +24,12 @@ const contactHandler = (req, res, next) => {
 exports.contactHandler = contactHandler;
 
 
+//Email function from NPM package nodemailer https://nodemailer.com/about/
+
+//The code in sendContactMessage() function is modified base on the example that nodemailer provided
 async function sendContactMessage(data) {
     // Generate test SMTP service account from ethereal.email Only needed if you
     // don't have a real mail account for testing
-console.log(data);
-
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
