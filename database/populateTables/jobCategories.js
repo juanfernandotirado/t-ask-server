@@ -1,6 +1,8 @@
 
 const { connectionPool } = require('../connection.js');
 
+const mysql = require('mysql');
+
 const array = [
 
     { soc: 11302100, name: 'Computer and Information Systems Managers', description: `Plan or coordinate activities in fields like information systems, and computer programming.` },
@@ -45,7 +47,7 @@ const populateJobCategories = () => {
 
         array.forEach(item => {
             const { soc, name, description } = item
-            concatenatedSQL += `INSERT INTO JobCategories (soc, name, description) VALUES ('${soc}', '${name}', '${description}' );`
+            concatenatedSQL += `INSERT INTO JobCategories (soc, name, description) VALUES ('${soc}',${mysql.escape(name)},${mysql.escape(description)});`
         })
 
         connectionPool.query(concatenatedSQL, (error, result) => {
