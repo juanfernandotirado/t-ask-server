@@ -13,6 +13,11 @@ const { getFirstTimeSpanId } = require('../../databaseUtils.js');
 const FILE_FINAL = __dirname + `/output/jobsFINAL${process.env._NUM}.json`
 
 let jobs = require(__dirname + `/output/jobs${process.env._NUM}.json`)
+
+// jobs = jobs.filter((item, index) => {
+//     return index < 100
+// })
+
 let jobsTechTags = require(__dirname + `/output/jobsTechTags${process.env._NUM}.json`)
 
 ////////////////////////////////////////////////

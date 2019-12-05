@@ -2,10 +2,12 @@ const googleTrends = require('google-trends-api');
 const { getComparisonArrays, getValuesInProportion } = require('./trendsUtils.js')
 const { getLanguagesLatestCount, getLatestTimeSpan } = require('../database/databaseUtils.js')
 
-//TODO - Refactor hardcoded date for trends
 
+
+//We are stored the latest google trends result for reuse.
+//Resets daily or upon server restart.
 let cachedTrends;
-let lastRequestTime;
+let lastRequestTimePlusOneDay;
 
 /**
  * As soon as this script runs, we will get the latest timespan,
@@ -21,37 +23,40 @@ getLatestTimeSpan()
 
 const trends = (req, res, next) => {
 
-    if (lastRequestTime && lastRequestTime > new Date()) {
-        console.log("Cache!");
-
+    //Uses cached response if it was last requested within a day at most.
+    if (lastRequestTimePlusOneDay && lastRequestTimePlusOneDay > new Date()) {
         sendServerResponse(res, cachedTrends)
     } else {
 
-        console.log("Request again");
+        //If there is no cached trend response, then start Trend requests:
+
         let languageGlobal;
 
+        //1. Get the list of languages and their popularity based on Github Repos.
         getLanguagesLatestCount()
-            // getLanguages()
             .then(langs => {
                 languageGlobal = langs
 
+                //2. Uses the most popular language we have from Github, as a base for doing the requests on Trends API...
                 return startRequestingTrends(languageGlobal)
             })
             .then(trends => {
 
                 //CHECK HERE-----
 
+                //3. If the most popular language from Trends API results is the SAME as the one we used as a base, then use this response.
                 if (trends[0].data[0].name === languageGlobal[0].name) {
 
                     //Response #1
                     sendServerResponse(res, trends)
 
                     //Register last requested date:
-                    lastRequestTime = new Date()
-                    lastRequestTime = lastRequestTime.setDate(lastRequestTime.getDate() + 1)
+                    lastRequestTimePlusOneDay = new Date()
+                    lastRequestTimePlusOneDay = lastRequestTimePlusOneDay.setDate(lastRequestTimePlusOneDay.getDate() + 1)
 
                 } else {
 
+                    //4. ***
                     //....................//....................//....................
                     // If the base programming language languageGlobal[0] was NOT
                     // The most popular, the update the order of the languages,
@@ -63,7 +68,6 @@ const trends = (req, res, next) => {
                     let i = 0
                     languageGlobal[0] = languageGlobal.find((item, index) => {
                         i = index
-                        // console.log(i);
 
                         return item.name === trends[0].data[0].name
                     })
@@ -78,8 +82,8 @@ const trends = (req, res, next) => {
                             sendServerResponse(res, r)
 
                             //Register last requested date:
-                            lastRequestTime = new Date()
-                            lastRequestTime = lastRequestTime.setDate(lastRequestTime.getDate() + 1)
+                            lastRequestTimePlusOneDay = new Date()
+                            lastRequestTimePlusOneDay = lastRequestTimePlusOneDay.setDate(lastRequestTimePlusOneDay.getDate() + 1)
                         })
                 }
                 //....................//....................//....................
@@ -179,8 +183,10 @@ const getAllTrends = (array, resultArray = []) => {
 }
 
 /**
-* getTrendLanguages(['java', 'python', 'Go', 'Swift', 'Javascript'])
-*/
+ * Retrieves for a single set of languages (5 at a time)
+ * 
+ * getTrendLanguages(['java', 'python', 'Go', 'Swift', 'Javascript'])
+ */
 const getTrendLanguages = (languagesArray) => {
 
     return new Promise((resolve, reject) => {
