@@ -827,7 +827,7 @@ exports.createUserDatabase = createUserDatabase;
 const checkTokenDatabase = (token) => {
     return new Promise((resolve, reject) => {
 
-        const sql = `SELECT * FROM login WHERE token = ${mysql.escape(token)};`
+        const sql = `SELECT * FROM Login WHERE token = ${mysql.escape(token)};`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {
@@ -859,7 +859,7 @@ exports.checkTokenDatabase = checkTokenDatabase;
 const saveUserToken = (userWithToken) => {
     return new Promise((resolve, reject) => {
 
-        const sql = `INSERT INTO login (id_user, token) VALUES (${userWithToken.id_user}, ${mysql.escape(userWithToken.token)});`
+        const sql = `INSERT INTO Login (id_user, token) VALUES (${userWithToken.id_user}, ${mysql.escape(userWithToken.token)});`
 
         connectionPool.query(sql, (error, result) => {
             if (error) {

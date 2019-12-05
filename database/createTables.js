@@ -111,7 +111,7 @@ CREATE TABLE Jobs (
         FOREIGN KEY (id_timespan) REFERENCES TimeSpan(id_timespan)
         );
 
-        CREATE TABLE login (
+        CREATE TABLE Login (
             id_login int NOT NULL AUTO_INCREMENT,
             id_user int,
             created timestamp DEFAULT CURRENT_TIMESTAMP,
