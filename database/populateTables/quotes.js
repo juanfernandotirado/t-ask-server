@@ -45,7 +45,7 @@ const combineLanguagesIdsAndQuotes = () => {
 
                 let languages = result
 
-                const workSheetsFromFile = xlsx.parse(`${__dirname}/quotes2.xlsx`);
+                const workSheetsFromFile = xlsx.parse(`${__dirname}/quotes.xlsx`);
                 let quotesArray = workSheetsFromFile[0].data
                 //console.log(quotesArray);
 
@@ -79,26 +79,26 @@ const combineLanguagesIdsAndQuotes = () => {
 }
 
 combineLanguagesIdsAndQuotes()
-    .then(newQuotesArray=>{
+    .then(newQuotesArray => {
 
         let combinedSql = ''
 
         newQuotesArray.forEach(item => {
             const quote = item.quote
             const type = item.type
-            const id_language = item.id_language            
+            const id_language = item.id_language
 
-            combinedSql+= `INSERT INTO Quotes (quote, type, id_language) VALUES (${mysql.escape(quote)}, ${mysql.escape(type)}, ${id_language});`
-          
+            combinedSql += `INSERT INTO Quotes (quote, type, id_language) VALUES (${mysql.escape(quote)}, ${mysql.escape(type)}, ${id_language});`
+
         })
 
         //console.log(combinedSql);
-        
+
 
         connectionPool.query(combinedSql, (error, result) => {
             if (error) {
                 console.log(error);
-                
+
             } else {
                 console.log('populateQuotes DONE');
             }

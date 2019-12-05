@@ -55,18 +55,34 @@ const createUser = (req, res, next) => {
         newUserEmail,
         newUserPassword,
         userLanguagesArray,
-    )    
-        .then(createToken)
-        .then(saveUserToken)
+    )
+        .then(result => {
 
-        .then(r => {
-            res.send(r)
+            //Another promise chain:
+            return createToken()
+                .then(saveUserToken)
+
+                .then(r => {
+                    res.send(r)
+                })
+                .catch(err => {
+
+                    if (err) {
+                        const e = new Error(err)
+                        e.status = 422
+
+                        next(e)
+                    } else {
+                        next(err)
+                    }
+                })
+
         })
         .catch(err => {
 
             if (err) {
                 const e = new Error(err)
-                e.status = 422
+                e.status = 500
 
                 next(e)
             } else {

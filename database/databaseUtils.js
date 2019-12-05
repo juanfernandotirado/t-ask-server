@@ -585,6 +585,9 @@ exports.getQuotes = getQuotes;
 
 /////////////////////////////////////////////////////////////////////////////
 
+/**
+ * The promise chain is in the RETURN.
+ */
 const createUserDatabase = (newUserName, newUserEmail, newUserPassword, languagesIdArray) => {
 
     const checkEmail = () => {
