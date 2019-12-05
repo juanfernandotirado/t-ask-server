@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { languages, languagesTimeSpans} = require('../controllers/languagesController.js')
-
-const {trends} = require('../controllers/trendController.js')
+const { trends, languages, languagesTimeSpans} = require('../controllers/languagesController.js')
 
 router.get('/', languages)
 

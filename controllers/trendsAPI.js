@@ -2,9 +2,13 @@ const googleTrends = require('google-trends-api');
 const { getComparisonArrays, getValuesInProportion } = require('./trendsUtils.js')
 const { getLanguagesLatestCount, getLatestTimeSpan } = require('../database/databaseUtils.js')
 
+/**
+ * Because we are using Google Trends exclusively for language popularity,
+ * We are just redirecting the code from this file to the languagesController.js
+ */
 
 
-//We are stored the latest google trends result for reuse.
+//We are storing the latest google trends result for reuse.
 //Resets daily or upon server restart.
 let cachedTrends;
 let lastRequestTimePlusOneDay;
@@ -48,11 +52,7 @@ const trends = (req, res, next) => {
                 if (trends[0].data[0].name === languageGlobal[0].name) {
 
                     //Response #1
-                    sendServerResponse(res, trends)
-
-                    //Register last requested date:
-                    lastRequestTimePlusOneDay = new Date()
-                    lastRequestTimePlusOneDay = lastRequestTimePlusOneDay.setDate(lastRequestTimePlusOneDay.getDate() + 1)
+                    sendServerResponseSaveDate(res, trends)
 
                 } else {
 
@@ -79,11 +79,7 @@ const trends = (req, res, next) => {
                         .then(r => {
 
                             //Response #2                            
-                            sendServerResponse(res, r)
-
-                            //Register last requested date:
-                            lastRequestTimePlusOneDay = new Date()
-                            lastRequestTimePlusOneDay = lastRequestTimePlusOneDay.setDate(lastRequestTimePlusOneDay.getDate() + 1)
+                            sendServerResponseSaveDate(res, r)
                         })
                 }
                 //....................//....................//....................
@@ -114,15 +110,21 @@ const sendServerResponse = (res, trends) => {
     res.send(trends)
 }
 
+const sendServerResponseSaveDate = (res, trends) => {
+
+    sendServerResponse(res, trends)
+
+    //Register last requested date:
+    lastRequestTimePlusOneDay = new Date()
+    lastRequestTimePlusOneDay = lastRequestTimePlusOneDay.setDate(lastRequestTimePlusOneDay.getDate() + 1)
+}
+
+
 const startRequestingTrends = (languages) => {
     return new Promise((resolve, reject) => {
 
         languages.forEach(item => {
             delete item.total
-
-            //todo - remove this
-            // delete item.id_language
-            // delete item.description
         })
 
         /** Another promise chain - RESULT HERE */
@@ -271,11 +273,6 @@ const getProportionObj = (arrayOfTrends, languages) => {
         return item
     }
 
-    // return {
-    //     usa: usa.map(mapRanking),
-    //     can: can.map(mapRanking)
-    // }
-
     return [
         {
             country: 'US',
@@ -286,11 +283,6 @@ const getProportionObj = (arrayOfTrends, languages) => {
             data: can
         }
     ]
-
-    // return {
-    //     usa: usa,
-    //     can: can
-    // }
 }
 
 const mergeTrends = (trends) => {
