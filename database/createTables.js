@@ -67,22 +67,7 @@ CREATE TABLE Jobs (
         PRIMARY KEY (id_language, id_user),
         FOREIGN KEY (id_language) REFERENCES Languages(id_language),
         FOREIGN KEY (id_user) REFERENCES Users(id_user)
-        );
-            
-        CREATE TABLE FavoriteEvevents (
-        id_event int NOT NULL AUTO_INCREMENT,
-        id_user int,
-        PRIMARY KEY (id_event),
-        FOREIGN KEY (id_user) REFERENCES Users(id_user)
-        );
-            
-        CREATE TABLE FavoriteArticles (
-        id_article int NOT NULL AUTO_INCREMENTT,
-        id_user int,
-        PRIMARY KEY (id_article),
-        FOREIGN KEY (id_user) REFERENCES Users(id_user)
-        );
-            
+        );        
             
         CREATE TABLE Quotes (
         id_quote int NOT NULL AUTO_INCREMENT,
@@ -91,15 +76,6 @@ CREATE TABLE Jobs (
         type varchar(255),
         PRIMARY KEY (id_quote),
         FOREIGN KEY (id_language) REFERENCES Languages(id_language)
-        );
-            
-            
-        CREATE TABLE UsersLocations (
-        id_location int,
-        id_user int,
-        PRIMARY KEY (id_location, id_user),
-        FOREIGN KEY (id_location) REFERENCES Location(id_location),
-        FOREIGN KEY (id_user) REFERENCES Users(id_user)
         );
             
         CREATE TABLE LanguagesTimeSpan (
