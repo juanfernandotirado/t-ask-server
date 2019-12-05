@@ -62,8 +62,8 @@ const createUser = (req, res, next) => {
             return createToken()
                 .then(saveUserToken)
 
-                .then(r => {
-                    res.send(r)
+                .then(r => {                
+                    return res.status(201).send(r)                
                 })
                 .catch(err => {
 
@@ -123,7 +123,7 @@ const loginUser = (req, res, next) => {
         .then(saveUserToken)
         .then(userWithToken => {
 
-            res.send(userWithToken)
+            res.status(201).send(userWithToken)
         })
 
         .catch(err => {
