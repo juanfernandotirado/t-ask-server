@@ -6,7 +6,7 @@ const articlesSearch = (req, res, next) => {
 
   //Get user query text
   const queryText = req.body.query;
-  console.log(queryText);
+  
   //Start crawling based on the query text
   fetchArticleWithQuery(queryText).then(value => {
 

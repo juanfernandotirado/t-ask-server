@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { eventsSearch } = require('../controllers/eventsController.js')
 
-router.post('/', eventsSearch)
+router.get('/', eventsSearch)
 
 
 module.exports.eventsRouter = router;
