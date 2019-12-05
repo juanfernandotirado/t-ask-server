@@ -323,7 +323,7 @@ const getJobCategories = () => {
                     }
                     //...
                     result.forEach(item => {
-                        console.log(item);
+                        // console.log(item);
                         
                         if (item.id_location == 1) {
                             objUS.data.push({

@@ -1,23 +1,52 @@
-const {getJobCategories, getAllJobsForEachLanguages, getAllJobsForEachLocation} = require('../database/databaseUtils.js')
+const { getJobCategories, getAllJobsForEachLanguages, getAllJobsForEachLocation } = require('../database/databaseUtils.js')
+
+//...
+//We are storing the latest results for reuse.
+//Resets daily or upon server restart.
+let cachedJobCategories;
+let lastRequestTimePlusOneDay_jobCategories;
+
+let cachedJobLanguages;
+let lastRequestTimePlusOneDay_jobsLanguages;
+
+let cachedJobLocations;
+let lastRequestTimePlusOneDay_jobsLocations;
+
+//...
 
 const jobCategories = (req, res, next) => {
 
-    getJobCategories()
-    .then(result => {
-        res.send(result)
-    })
-    .catch(err => {
+    //Get latest checked date:
+    lastRequestTimePlusOneDay_jobCategories = getUpdatedLastCheckedDate(lastRequestTimePlusOneDay_jobCategories)
 
-        if (err) {
-            const e = new Error(err)
-            e.status = 500
+    if (lastRequestTimePlusOneDay_jobCategories) {
 
-            next(e)
-        } else {
-            next(err)
-        }
-    })
+        //Just send the cached result:
+        res.send(cachedJobCategories)
 
+    } else {
+
+        getJobCategories()
+            .then(result => {
+
+                //Cache result and save latest date:
+                cachedJobCategories = result
+                lastRequestTimePlusOneDay_jobCategories = getCurrentDatePlusOneDay()
+
+                res.send(result)
+            })
+            .catch(err => {
+
+                if (err) {
+                    const e = new Error(err)
+                    e.status = 500
+
+                    next(e)
+                } else {
+                    next(err)
+                }
+            })
+    }
 
 }
 
@@ -27,22 +56,37 @@ exports.jobCategories = jobCategories;
 
 const jobsLanguages = (req, res, next) => {
 
-    getAllJobsForEachLanguages()
-    .then(result => {
-        res.send(result)
-    })
-    .catch(err => {
+    //Get latest checked date:
+    lastRequestTimePlusOneDay_jobsLanguages = getUpdatedLastCheckedDate(lastRequestTimePlusOneDay_jobsLanguages)
 
-        if (err) {
-            const e = new Error(err)
-            e.status = 500
+    if (lastRequestTimePlusOneDay_jobsLanguages) {
 
-            next(e)
-        } else {
-            next(err)
-        }
-    })
+        //Just send the cached result:
+        res.send(cachedJobLanguages)
 
+    } else {
+
+        getAllJobsForEachLanguages()
+            .then(result => {
+
+                //Cache result and save latest date:
+                cachedJobLanguages = result
+                lastRequestTimePlusOneDay_jobsLanguages = getCurrentDatePlusOneDay()
+                res.send(result)
+            })
+            .catch(err => {
+
+                if (err) {
+                    const e = new Error(err)
+                    e.status = 500
+
+                    next(e)
+                } else {
+                    next(err)
+                }
+            })
+
+    }
 
 }
 
@@ -52,23 +96,61 @@ exports.jobsLanguages = jobsLanguages;
 
 const jobsLocations = (req, res, next) => {
 
-    getAllJobsForEachLocation()
-    .then(result => {
-        res.send(result)
-    })
-    .catch(err => {
+    //Get latest checked date:
+    lastRequestTimePlusOneDay_jobsLocations = getUpdatedLastCheckedDate(lastRequestTimePlusOneDay_jobsLocations)
 
-        if (err) {
-            const e = new Error(err)
-            e.status = 500
+    if (lastRequestTimePlusOneDay_jobsLocations) {
 
-            next(e)
-        } else {
-            next(err)
-        }
-    })
+        //Just send the cached result:
+        res.send(cachedJobLocations)
 
+    } else {
+        getAllJobsForEachLocation()
+            .then(result => {
+
+                //Cache result and save latest date:
+                cachedJobLocations = result
+                lastRequestTimePlusOneDay_jobsLocations = getCurrentDatePlusOneDay()
+
+                res.send(result)
+            })
+            .catch(err => {
+
+                if (err) {
+                    const e = new Error(err)
+                    e.status = 500
+
+                    next(e)
+                } else {
+                    next(err)
+                }
+            })
+    }
 
 }
 
 exports.jobsLocations = jobsLocations;
+
+////////////////////////////////////////////////////////////
+// Utils:
+////////////////////////////////////////////////////////////
+
+/**
+ * Returns a date object plus one day, or the same date parameter,
+ * if the date parameter is higher than the current date.
+ */
+const getUpdatedLastCheckedDate = (lastRequestTimePlusOneDay) => {
+
+    if (lastRequestTimePlusOneDay && lastRequestTimePlusOneDay > new Date()) {
+        return getCurrentDatePlusOneDay()
+    } else {
+        return lastRequestTimePlusOneDay
+    }
+}
+
+const getCurrentDatePlusOneDay = () => {
+    var newDate = new Date()
+    newDate = newDate.setDate(newDate.getDate() + 1)
+
+    return newDate;
+}
