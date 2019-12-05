@@ -59,11 +59,12 @@ const createUser = (req, res, next) => {
         .then(result => {
 
             //Another promise chain:
-            return createToken()
+            return loginUserDatabase(newUserEmail, newUserPassword)
+                .then(createToken)
                 .then(saveUserToken)
+                .then(userWithToken => {
 
-                .then(r => {                
-                    return res.status(201).send(r)                
+                    res.status(201).send(userWithToken)
                 })
                 .catch(err => {
 
